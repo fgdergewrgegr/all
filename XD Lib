@@ -28,7 +28,7 @@ print("XD Lib")
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
 	xdl["gcc"] = function(name) return xdl.ffc(xdl.char(), name) or xdl.wfc(xdl.char(), name) end
 
-	xdl["hrp"] = function() return xdl.ggc("HumanoidRootParta") end
+	xdl["hrp"] = function() return xdl.ggc("HumanoidRootPart") end
 	xdl["hum"] = function() return xdl.ggc("Humanoid") end
 	xdl["hd"] = function() return xdl.ggc("Head") end
 
