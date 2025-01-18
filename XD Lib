@@ -1,4 +1,4 @@
-local xdl = {}
+local xdl = {} -- local xdl = loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))()
 print("XD Lib")
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
@@ -21,23 +21,31 @@ print("XD Lib")
 -- function xdl:_____() end
 	function xdl:pcall(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
 
+	function xdl:ffd(parent, name) return parent:FindFirstDescendant(name) end
+	function xdl:ffds(parent, names) for i,name in names do names[i] = xdl:ffd(parent, name) end return unpack(names) end
+
 	function xdl:ffc(parent, name) return parent:FindFirstChild(name) end
-	function xdl:ffct(parent, names) for i,name in names do local obj = xdl:ffc(parent, name); if obj then parent = obj; names[i] = obj end end return unpack(names) end
+	function xdl:ffcs(parent, names) for i,name in names do names[i] = xdl:ffc(parent, name) end return unpack(names) end
+	function xdl:ffct(parent, names) for i,name in names do local obj = xdl:ffc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
 
 	function xdl:wfc(parent, name) while not(xdl:ffc(parent, name)) do task.wait() end; return parent[name] end
-	function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj; names[i] = obj end end return unpack(names) end
+	function xdl:wfcs(parent, names) for i,name in names do names[i] = xdl:wfc(parent, name) end return unpack(names) end
+	function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
+
+	function xdl:difp(obj) if obj and obj.Parent then return obj end end
+	function xdl:mg(pos1, pos2) return (pos1 - pos2).Magnitude end
+	function xdl:amg(arg1, arg2) if typeof(arg1) ~= "Vector3" then arg1 = arg1.Position end; if typeof(arg2) ~= "Vector3" then arg2 = arg2.Position end; return xdl:mg(arg1, arg2) end
+
+-- function xdl["_____"] = function() end
+	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
-	xdl["gcc"] = function(name) return xdl:ffc(xdl.char(), name) or xdl.wfc(xdl.char(), name) end
+	function xdl:gcc(name) return xdl:ffc(xdl.char(), name) or xdl.wfc(xdl.char(), name) end
 
-	xdl["hrp"] = function() return xdl.ggc("HumanoidRootPart") end
-	xdl["hum"] = function() return xdl.ggc("Humanoid") end
-	xdl["hd"] = function() return xdl.ggc("Head") end
+	xdl["hrp"] = function() return xdl:gcc("HumanoidRootPart") end
+	xdl["hum"] = function() return xdl:gcc("Humanoid") end
+	xdl["hd"] = function() return xdl:gcc("Head") end
 
 	xdl["all"] = function() return xdl.hrp(), xdl.hum(), xdl.hd() end
-
-	xdl["difp"] = function(obj) if obj and obj.Parent then return obj end end
-	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
-	xdl["mg"] = function(pos1, pos2) return (pos1 - pos2).Magnitude end
 
 return xdl
