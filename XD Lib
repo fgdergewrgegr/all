@@ -2,15 +2,15 @@ local xdl = {}
 print("XD Lib")
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
+	xdl["p"] = game:GetService("Players")
+	xdl["r"] = game:GetService("RunService")
+	xdl["d"] = game:GetService("Debris")
 	xdl["rs"] = game:GetService("ReplicatedStorage")
 	xdl["rf"] = game:GetService("ReplicatedFirst")
-	xdl["p"] = game:GetService("Players")
-	xdl["uis"] = game:GetService("UserInputService")
 	xdl["sg"] = game:GetService("StarterGui")
 	xdl["hs"] = game:GetService("HttpService")
-	xdl["r"] = game:GetService("RunService")
 	xdl["sg"] = game:GetService("StarterGui")
-	xdl["d"] = game:GetService("Debris")
+	xdl["uis"] = game:GetService("UserInputService")
 
 -- xdl["_____"] = xdl._____.
 	xdl["me"] = xdl.p.LocalPlayer
@@ -18,15 +18,15 @@ print("XD Lib")
 	xdl["name"] = xdl.me.Name
 	xdl["dname"] = xdl.me.DisplayName
 
--- xdl["_____"] = function() end
-	xdl["ffc"] = function(parent, name) return parent:FindFirstChild(name) end
-	xdl["ffct"] = function(parent, names) for i,name in names do local obj = xdl.ffc(parent, name); if obj then parent = obj end end return unpack(names) end
+-- function xdl:_____() end
+	function xdl:ffc(parent, name) return parent:FindFirstChild(name) end
+	function xdl:ffct(parent, names) for i,name in names do local obj = xdl:ffc(parent, name); if obj then parent = obj; names[i] = obj end end return unpack(names) end
 
-	xdl["wfc"] = function(parent, name) while not(xdl.ffc(parent, name)) do task.wait() end; return parent[name] end
-	xdl["wfct"] = function(parent, names) for i,name in names do names[i] = xdl.wfc(name) end; return unpack(names) end
+	function xdl:wfc(parent, name) while not(xdl:ffc(parent, name)) do task.wait() end; return parent[name] end
+	function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj; names[i] = obj end end return unpack(names) end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
-	xdl["gcc"] = function(name) return xdl.ffc(xdl.char(), name) or xdl.wfc(xdl.char(), name) end
+	xdl["gcc"] = function(name) return xdl:ffc(xdl.char(), name) or xdl.wfc(xdl.char(), name) end
 
 	xdl["hrp"] = function() return xdl.ggc("HumanoidRootPart") end
 	xdl["hum"] = function() return xdl.ggc("Humanoid") end
