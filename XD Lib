@@ -19,6 +19,8 @@ print("XD Lib")
 	xdl["dname"] = xdl.me.DisplayName
 
 -- function xdl:_____() end
+	function xdl:pcall(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
+
 	function xdl:ffc(parent, name) return parent:FindFirstChild(name) end
 	function xdl:ffct(parent, names) for i,name in names do local obj = xdl:ffc(parent, name); if obj then parent = obj; names[i] = obj end end return unpack(names) end
 
