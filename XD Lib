@@ -89,4 +89,4 @@ print("XD Lib")
 	xdl["limbs"] = function() return xdl:gmcc("Right Arm"), xdl:gmcc("Right Leg"), xdl:gmcc("Left Arm"), xdl:gmcc("Left Leg") end
 	xdl["all"] = function() return xdl.hrp(), xdl.hum(), xdl.hd() end
 
--- return xdl
+return xdl
