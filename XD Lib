@@ -18,6 +18,11 @@ print("XD Lib")
 	xdl["name"] = xdl.me.Name
 	xdl["dname"] = xdl.me.DisplayName
 
+-- xdl["_____"] = function() end
+	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
+	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
+	xdl["plrs"] = function() return ipairs(xdl.p:GetPlayers()) end
+
 -- function xdl:_____() end
 	function xdl:convert(to, data)
 		local funcs = {
@@ -72,16 +77,11 @@ print("XD Lib")
 		function xdl:get_limbs(obj) return xdl:get_char_child("Right Arm", obj), xdl:get_char_child("Right Leg", obj), xdl:get_char_child("Left Arm", obj), xdl:get_char_child("Left Leg", obj) end
 			function xdl:g_limbs(...) return xdl:get_limbs(...) end
 			function xdl:gl(...) return xdl:g_limbs(...) end
-		function xdl:get_mychar_child(name) return xdl:ffc(char or xdl.char(), name) or xdl.wfc(char or xdl.char(), name) end
+		function xdl:get_mychar_child(name) return xdl:ffc(xdl.char(), name) or xdl.wfc(xdl.char(), name) end
 			function xdl:g_mychar_child(...) return xdl:get_mychar_child(...) end
 			function xdl:gmcc(...) return xdl:g_mychar_child(...) end
 
 -- xdl["_____"] = function() end
-	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
-	xdl["plrs"] = function() return ipairs(xdl.p:GetPlayers()) end
-
-	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
-
 	xdl["hrp"] = function() return xdl:gmcc("HumanoidRootPart") end
 	xdl["hum"] = function() return xdl:gmcc("Humanoid") end
 	xdl["hd"] = function() return xdl:gmcc("Head") end
