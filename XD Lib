@@ -21,8 +21,8 @@ print("XD Lib")
 -- function xdl:_____() end
 	function xdl:convert(to, data)
 		local funcs = {
-			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end,
-			["name"] = function(data) if typeof("Instance") then return data.Name end
+			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end end,
+			["name"] = function(data) if typeof("Instance") then return data.Name end end
 		}; func["vec3"] = func["vector3"]; func["v3"] = func["vec3"]
 		return funcs[to:lower()](data) or data
 	end; function xdl:con(...) return xdl:convert(...) end
@@ -89,4 +89,4 @@ print("XD Lib")
 	xdl["limbs"] = function() return xdl:gmcc("Right Arm"), xdl:gmcc("Right Leg"), xdl:gmcc("Left Arm"), xdl:gmcc("Left Leg") end
 	xdl["all"] = function() return xdl.hrp(), xdl.hum(), xdl.hd() end
 
-return xdl
+-- return xdl
