@@ -1,5 +1,5 @@
 local xdl = {} -- local xdl = loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))()
-print("XD Lib")
+local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
 	xdl["p"] = game:GetService("Players")
@@ -30,7 +30,7 @@ print("XD Lib")
 
 	--[[
 			function xdl:_____(...) return xdl:_____(...) end
-				function xdl:_____(...) return xdl:_____(...) end
+			function xdl:_____(...) return xdl:_____(...) end
 	]]
 
 	-- ♥others♥
@@ -60,6 +60,19 @@ print("XD Lib")
 			function xdl:ch(...) return xdl:ch(...) end
 
 	-- ♥gets♥
+		function get_time(cmd, svar)
+			local funcs = {
+				rww = function() local temp = timefunc; timefunc = os.clock() return os.clock() - temp end,
+				rwwv = function(var) return os.clock(), os.clock() - var end,
+				rw = function() if timefunc ~= 0 then local temp = timefunc timefunc = 0 return os.clock() - temp else timefunc = os.clock() end end,
+				rwv = function(var) if var ~= 0 then return 0, os.clock() - var else return os.clock(), 0 end end,
+				r = function() if timefunc1 ~= 0 then return os.clock() - timefunc1 end end,
+				rv = function(var) if var ~= 0 then return os.clock() - var end end
+			}; return funcs[cmd](svar)
+		end; function xdl:g_time(...) return xdl:get_time(...) end; function xdl:gt(...) return xdl:g_time(...) end
+		function xdl:get_func_time(func) local var = os.clock(); func(); return get_time("rv", var) end
+			function xdl:g_time_func(...) return xdl:get_func_time(...) end
+			function xdl:gtf(...) return xdl:g_time_func(...) end
 		function xdl:get_parents(obj) if obj.Parent then local p = obj; local tree = {obj} while p.Parent do p = p.Parent; table.insert(tree, p) end; return tree end end
 			function xdl:g_parents(...) return xdl:get_parents(...) end
 			function xdl:gp(...) return xdl:g_parents(...) end
