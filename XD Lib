@@ -23,7 +23,7 @@ print("XD Lib")
 		local funcs = {
 			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end end,
 			["name"] = function(data) if typeof("Instance") then return data.Name end end
-		}; func["vec3"] = func["vector3"]; func["v3"] = func["vec3"]
+		}; funcs["vec3"] = funcs["vector3"]; funcs["v3"] = funcs["vec3"]
 		return funcs[to:lower()](data) or data
 	end; function xdl:con(...) return xdl:convert(...) end
 	function xdl:c(...) return xdl:con(...) end
