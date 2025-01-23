@@ -18,8 +18,11 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 	xdl["name"] = xdl.me.Name
 	xdl["dname"] = xdl.me.DisplayName
 
--- function xdl:_____() end
+-- xdl["_____"] = 
+	xdl["mhv3"] = Vector3.new("inf", "inf", "inf")
+	xdl["nv3"] = Vector3.new()
 
+-- function xdl:_____() end
 	function xdl:convert(to, data)
 		local funcs = {
 			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end end,
@@ -89,15 +92,15 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 		function xdl:create_nv(parent, name, value) local nv = Instance.new("NumberValue", parent); nv.Value = value; nv.Name = name; return nv end
 		function xdl:create_bp(parent, name, pos, maxf) local bp = Instance.new("BodyPosition", parent)
 		bp.Name = name; bp.MaxForce = maxf; bp.D = 105; bp.P = 8000; if pos then bp.Position = pos end; return bp end
-		function xdl:create_bp1(parent, name, pos) return xdl:create_bp(parent, name, pos, N.V.mhv3) end
+		function xdl:create_bp1(parent, name, pos) return xdl:create_bp(parent, name, pos, xdl.mhv3) end
 		function xdl:create_bp2(parent, name) return xdl:create_bp1(parent, name, parent.Position) end
 		function xdl:create_bg(parent, name, maxt, d, cframe) local bg = Instance.new("BodyGyro", parent)
 		bg.Name = name; bg.MaxTorque = maxt; bg.D = d; if cframe then bg.CFrame = cframe end return bg end
-		function xdl:create_bg1(parent, name, cframe) return xdl:create_bg(parent, name, N.V.mhv3, 100, cframe) end
+		function xdl:create_bg1(parent, name, cframe) return xdl:create_bg(parent, name, xdl.mhv3, 100, cframe) end
 		function xdl:create_bg2(parent, name) return xdl:create_bg1(parent, name, parent.CFrame) end
 		function xdl:create_bv(parent, name, vl, maxf) local vel = Instance.new("BodyVelocity", parent);
 		vel.Name = name; vel.Velocity = vl; vel.MaxForce = maxf; return vel end
-		function xdl:create_bv1(parent, name, vl) return xdl:create_bv(parent, name, vl, N.V.mhv3) end
+		function xdl:create_bv1(parent, name, vl) return xdl:create_bv(parent, name, vl, xdl.mhv3) end
 		function xdl:create_sb(parent, name, adr, c3, sc3, t, st, lt) local sb = Instance.new("SelectionBox", parent); sb.Name = name
 		sb.Adornee = adr; sb.Color3 = c3; sb.SurfaceColor3 = sc3; sb.Transparency = t; sb.SurfaceTransparency = st; sb.LineThickness = lt; return sb end
 		function xdl:create_sb05(prt, name, adr, c3, sc3, t, st) return xdl:create_sb(prt, name, adr, c3, sc3, t, st, 0.01) end
@@ -117,7 +120,7 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 		function xdl:create_v3v1(parent, name) return xdl:create_v3v(parent, name, Vector3.new()) end
 		function xdl:create_bav(parent, name, vec, maxt) local bav = Instance.new("BodyAngularVelocity", parent)
 		bav.Name = name; bav.AngularVelocity = vec; bav.MaxTorque = maxt; return bav end
-		function xdl:create_bav1(parent, name, vec) return xdl:create_bav(PlayerEvents, name, vec, N.V.mhv3) end
+		function xdl:create_bav1(parent, name, vec) return xdl:create_bav(PlayerEvents, name, vec, xdl.mhv3) end
 		function xdl:create_prt(parent, name, pos, size, t, cc, ct, cq, a) local prt = Instance.new("Part", parent); prt.Size = size
 		prt.Transparency = t; prt.Name = name; prt.CanCollide = cc; prt.CanTouch = ct; prt.CanQuery = cq; prt.Anchored = a; return prt end
 		function xdl:create_prt1(parent, name, pos, size, ct, cq, a) return xdl:create_prt(parent, name, pos, size, 1, false, ct, cq, a) end
