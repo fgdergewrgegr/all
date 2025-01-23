@@ -19,25 +19,22 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 	xdl["dname"] = xdl.me.DisplayName
 
 -- function xdl:_____() end
+
 	function xdl:convert(to, data)
 		local funcs = {
 			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end end,
 			["name"] = function(data) if typeof(data) == "Instance" then return data.Name end end
 		}; funcs["vec3"] = funcs["vector3"]; funcs["v3"] = funcs["vec3"]
 		return funcs[to:lower()](data) or data
-	end; function xdl:con(...) return xdl:convert(...) end
-	function xdl:c(...) return xdl:con(...) end
-
-	--[[
-			function xdl:_____(...) return xdl:_____(...) end
-			function xdl:_____(...) return xdl:_____(...) end
-	]]
+	end; xdl["con"] = xdl["convert"]; xdl["c"] = xdl["con"]
 
 	-- ♥others♥
 		function xdl:pcall(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
 		function xdl:magnitude(pos1, pos2) return (xdl:convert("Vector3", pos1) - xdl:convert("Vector3", pos2)).Magnitude end
-			function xdl:mag(...) return xdl:magnitude(...) end
-			function xdl:mg(...) return xdl:mag(...) end
+		
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
+			xdl["mag"] = xdl["magnitude"]; xdl["mg"] = xdl["mag"]
 
 	-- ♥fwcd♥
 		function xdl:ffc(parent, name) return parent:FindFirstChild(xdl:convert("Name", name)) end
@@ -51,13 +48,13 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 		function xdl:wfcs(parent, names) for i,name in names do names[i] = xdl:wfc(parent, name) end return unpack(names) end
 		function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
 
-	-- ♥check♥
+	-- ♥checks♥
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
-			function xdl:c_list(...) return xdl:check_list(...) end
-			function xdl:cl(...) return xdl:c_list(...) end
 		function xdl:check_hum(hum) if hum and hum.Health ~= 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then return hum end end
-			function xdl:c_hum(...) return xdl:check_hum(...) end
-			function xdl:ch(...) return xdl:ch(...) end
+		
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["c_list"] = xdl["check_list"]; xdl["cl"] = xdl["c_list"]
+			xdl["c_hum"] = xdl["check_hum"]; xdl["ch"] = xdl["c_hum"]
 
 	-- ♥gets♥
 		function get_time(cmd, svar)
@@ -69,25 +66,102 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 				r = function() if timefunc1 ~= 0 then return os.clock() - timefunc1 end end,
 				rv = function(var) if var ~= 0 then return os.clock() - var end end
 			}; return funcs[cmd](svar)
-		end; function xdl:g_time(...) return xdl:get_time(...) end; function xdl:gt(...) return xdl:g_time(...) end
+		end; xdl["g_time"] = xdl["get_time"]; xdl["gt"] = xdl["g_time"]
 		function xdl:get_func_time(func) local var = os.clock(); func(); return get_time("rv", var) end
-			function xdl:g_time_func(...) return xdl:get_func_time(...) end
-			function xdl:gtf(...) return xdl:g_time_func(...) end
 		function xdl:get_parents(obj) if obj.Parent then local p = obj; local tree = {obj} while p.Parent do p = p.Parent; table.insert(tree, p) end; return tree end end
-			function xdl:g_parents(...) return xdl:get_parents(...) end
-			function xdl:gp(...) return xdl:g_parents(...) end
 		function xdl:get_char(obj) if not(obj) then obj = xdl.me end; for _,plr in xdl.plrs() do local char = plr.Character; if obj == plr or (char and obj:IsDescendantOf(char)) then return char end end end
-			function xdl:g_char(...) return xdl:get_char(...) end
-			function xdl:gc(...) return xdl:g_char(...) end
 		function xdl:get_char_child(name, obj) return xdl:get_char(obj) and xdl:ffc(xdl:get_char(obj), xdl:convert("Name", name)) end
-			function xdl:g_char_child(...) return xdl:get_char_child(...) end
-			function xdl:gcc(...) return xdl:g_char_child(...) end
 		function xdl:get_limbs(obj) return xdl:get_char_child("Right Arm", obj), xdl:get_char_child("Right Leg", obj), xdl:get_char_child("Left Arm", obj), xdl:get_char_child("Left Leg", obj) end
-			function xdl:g_limbs(...) return xdl:get_limbs(...) end
-			function xdl:gl(...) return xdl:g_limbs(...) end
-		function xdl:get_mychar_child(name) return xdl:ffc(xdl.char(), name) or xdl:wfc(xdl.char(), name) end
-			function xdl:g_mychar_child(...) return xdl:get_mychar_child(...) end
-			function xdl:gmcc(...) return xdl:g_mychar_child(...) end
+		function xdl:get_my_char_child(name) return xdl:ffc(xdl.char(), name) or xdl:wfc(xdl.char(), name) end
+
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["g_get_func_time"] = xdl["get_func_time"]; xdl["gft"] = xdl["g_get_func_time"]
+			xdl["g_get_parents"] = xdl["get_parents"]; xdl["gp"] = xdl["g_get_parents"]
+			xdl["g_get_char"] = xdl["get_char"]; xdl["gc"] = xdl["g_get_char"]
+			xdl["g_get_char_child"] = xdl["get_char_child"]; xdl["gcc"] = xdl["g_get_char_child"]
+			xdl["g_get_limbs"] = xdl["get_limbs"]; xdl["gl"] = xdl["g_get_limbs"]
+			xdl["g_get_my_char_child"] = xdl["get_my_char_child"]; xdl["gmcc"] = xdl["g_get_my_char_child"]
+
+	-- ♥xdl:creates♥
+		function xdl:create_blv(parent, name, value) local bv = Instance.new("BoolValue", parent); bv.Value = value; bv.Name = name; return bv end
+		function xdl:create_ov(parent, name, value) local ov = Instance.new("ObjectValue", parent); ov.Value = value; ov.Name = name; return ov end
+		function xdl:create_sv(parent, name, value) local sv = Instance.new("StringValue", parent); sv.Value = value; sv.Name = name; return sv end
+		function xdl:create_nv(parent, name, value) local nv = Instance.new("NumberValue", parent); nv.Value = value; nv.Name = name; return nv end
+		function xdl:create_bp(parent, name, pos, maxf) local bp = Instance.new("BodyPosition", parent)
+		bp.Name = name; bp.MaxForce = maxf; bp.D = 105; bp.P = 8000; if pos then bp.Position = pos end; return bp end
+		function xdl:create_bp1(parent, name, pos) return xdl:create_bp(parent, name, pos, N.V.mhv3) end
+		function xdl:create_bp2(parent, name) return xdl:create_bp1(parent, name, parent.Position) end
+		function xdl:create_bg(parent, name, maxt, d, cframe) local bg = Instance.new("BodyGyro", parent)
+		bg.Name = name; bg.MaxTorque = maxt; bg.D = d; if cframe then bg.CFrame = cframe end return bg end
+		function xdl:create_bg1(parent, name, cframe) return xdl:create_bg(parent, name, N.V.mhv3, 100, cframe) end
+		function xdl:create_bg2(parent, name) return xdl:create_bg1(parent, name, parent.CFrame) end
+		function xdl:create_bv(parent, name, vl, maxf) local vel = Instance.new("BodyVelocity", parent);
+		vel.Name = name; vel.Velocity = vl; vel.MaxForce = maxf; return vel end
+		function xdl:create_bv1(parent, name, vl) return xdl:create_bv(parent, name, vl, N.V.mhv3) end
+		function xdl:create_sb(parent, name, adr, c3, sc3, t, st, lt) local sb = Instance.new("SelectionBox", parent); sb.Name = name
+		sb.Adornee = adr; sb.Color3 = c3; sb.SurfaceColor3 = sc3; sb.Transparency = t; sb.SurfaceTransparency = st; sb.LineThickness = lt; return sb end
+		function xdl:create_sb05(prt, name, adr, c3, sc3, t, st) return xdl:create_sb(prt, name, adr, c3, sc3, t, st, 0.01) end
+		function xdl:create_sb1(prt, name, c3, sc3, t, st) return xdl:create_sb05(prt, name, prt, c3, sc3, t, st) end
+		function xdl:create_sb2(prt, name, c3, sc3) return xdl:create_sb1(prt, name, c3, sc3, 0, 0.7) end
+		function xdl:create_sb3(prt, name, sc3) return xdl:create_sb2(prt, name, Color3.fromRGB(0, 0, 0), sc3) end
+		function xdl:create_spl(parent, name, prt, hum, c3, t) local spl = Instance.new("SelectionPartLasso", parent)
+		spl.Name = name; spl.Part = prt; spl.Humanoid = hum; spl.Color3 = c3; spl.Transparency = t; return spl end
+		function xdl:create_spl1(prt, name, c3, t) return xdl:create_spl(prt, name, prt, xdl.hum(), c3, t) end
+		function xdl:create_spl15(prt, name, c3, hum) return xdl:create_spl(prt, name, prt, hum, c3, 1) end
+		function xdl:create_spl2(prt, name, c3) return xdl:create_spl1(prt, name, c3, 1) end
+		function xdl:create_spnl(parent, name, vec, hum, c3, t) local spnl = Instance.new("SelectionPointLasso", parent)
+		spnl.Name = name; spnl.Point = vec; spnl.Humanoid = hum; spnl.Color3 = c3; spnl.Transparency = t; return spnl end
+		function xdl:create_spnl1(prt, name, vec, c3) return xdl:create_spnl(prt, name, vec, xdl.hum(), c3, 1) end
+		function xdl:create_md(parent, name) local md = Instance.new("Model", parent); md.Name = name; return md end
+		function xdl:create_v3v(parent, name, vec) local v3v = Instance.new("Vector3Value", parent); v3v.Name = name; v3v.Value = vec; return v3v end
+		function xdl:create_v3v1(parent, name) return xdl:create_v3v(parent, name, Vector3.new()) end
+		function xdl:create_bav(parent, name, vec, maxt) local bav = Instance.new("BodyAngularVelocity", parent)
+		bav.Name = name; bav.AngularVelocity = vec; bav.MaxTorque = maxt; return bav end
+		function xdl:create_bav1(parent, name, vec) return xdl:create_bav(PlayerEvents, name, vec, N.V.mhv3) end
+		function xdl:create_prt(parent, name, pos, size, t, cc, ct, cq, a) local prt = Instance.new("Part", parent); prt.Size = size
+		prt.Transparency = t; prt.Name = name; prt.CanCollide = cc; prt.CanTouch = ct; prt.CanQuery = cq; prt.Anchored = a; return prt end
+		function xdl:create_prt1(parent, name, pos, size, ct, cq, a) return xdl:create_prt(parent, name, pos, size, 1, false, ct, cq, a) end
+		function xdl:create_prt2(parent, name, size, ct, cq) return xdl:create_prt1(parent, name, Vector3.new(), size, ct, cq, true) end
+		function xdl:create_prt3(parent, name, size, cq) return xdl:create_prt2(parent, name, size, false, cq) end
+		function xdl:create_ao(parent, name, att) local ao = Instance.new("AlignOrientation", parent); ao.MaxTorque = math.huge; ao.Name = name
+		ao.Responsiveness = 200; ao.Mode = Enum.OrientationAlignmentMode.OneAttachment; ao.Attachment0 = att; return ao end
+		function xdl:create_att(parent, name) local att = Instance.new("Attachment", parent); att.Name = name; return att end
+
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["c_blv"] = xdl["create_blv"]; xdl["cblv"] = xdl["c_blv"]
+			xdl["c_ov"] = xdl["create_ov"]; xdl["cov"] = xdl["c_ov"]
+			xdl["c_sv"] = xdl["create_sv"]; xdl["csv"] = xdl["c_sv"]
+			xdl["c_nv"] = xdl["create_nv"]; xdl["cnv"] = xdl["c_nv"]
+			xdl["c_bp"] = xdl["create_bp"]; xdl["cbp"] = xdl["c_bp"]
+			xdl["c_bp1"] = xdl["create_bp1"]; xdl["cbp1"] = xdl["c_bp1"]
+			xdl["c_bp2"] = xdl["create_bp2"]; xdl["cbp2"] = xdl["c_bp2"]
+			xdl["c_bg"] = xdl["create_bg"]; xdl["cbg"] = xdl["c_bg"]
+			xdl["c_bg1"] = xdl["create_bg1"]; xdl["cbg1"] = xdl["c_bg1"]
+			xdl["c_bg2"] = xdl["create_bg2"]; xdl["cbg2"] = xdl["c_bg2"]
+			xdl["c_bv"] = xdl["create_bv"]; xdl["cbv"] = xdl["c_bv"]
+			xdl["c_bv1"] = xdl["create_bv1"]; xdl["cbv1"] = xdl["c_bv1"]
+			xdl["c_sb"] = xdl["create_sb"]; xdl["csb"] = xdl["c_sb"]
+			xdl["c_sb05"] = xdl["create_sb05"]; xdl["csb05"] = xdl["c_sb05"]
+			xdl["c_sb1"] = xdl["create_sb1"]; xdl["csb1"] = xdl["c_sb1"]
+			xdl["c_sb2"] = xdl["create_sb2"]; xdl["csb2"] = xdl["c_sb2"]
+			xdl["c_sb3"] = xdl["create_sb3"]; xdl["csb3"] = xdl["c_sb3"]
+			xdl["c_spl"] = xdl["create_spl"]; xdl["cspl"] = xdl["c_spl"]
+			xdl["c_spl1"] = xdl["create_spl1"]; xdl["cspl1"] = xdl["c_spl1"]
+			xdl["c_spl15"] = xdl["create_spl15"]; xdl["cspl15"] = xdl["c_spl15"]
+			xdl["c_spl2"] = xdl["create_spl2"]; xdl["cspl2"] = xdl["c_spl2"]
+			xdl["c_spnl"] = xdl["create_spnl"]; xdl["cspnl"] = xdl["c_spnl"]
+			xdl["c_spnl1"] = xdl["create_spnl1"]; xdl["cspnl1"] = xdl["c_spnl1"]
+			xdl["c_md"] = xdl["create_md"]; xdl["cmd"] = xdl["c_md"]
+			xdl["c_v3v"] = xdl["create_v3v"]; xdl["cv3v"] = xdl["c_v3v"]
+			xdl["c_v3v1"] = xdl["create_v3v1"]; xdl["cv3v1"] = xdl["c_v3v1"]
+			xdl["c_bav"] = xdl["create_bav"]; xdl["cbav"] = xdl["c_bav"]
+			xdl["c_bav1"] = xdl["create_bav1"]; xdl["cbav1"] = xdl["c_bav1"]
+			xdl["c_prt"] = xdl["create_prt"]; xdl["cprt"] = xdl["c_prt"]
+			xdl["c_prt1"] = xdl["create_prt1"]; xdl["cprt1"] = xdl["c_prt1"]
+			xdl["c_prt2"] = xdl["create_prt2"]; xdl["cprt2"] = xdl["c_prt2"]
+			xdl["c_prt3"] = xdl["create_prt3"]; xdl["cprt3"] = xdl["c_prt3"]
+			xdl["c_ao"] = xdl["create_ao"]; xdl["cao"] = xdl["c_ao"]
+			xdl["c_att"] = xdl["create_att"]; xdl["catt"] = xdl["c_att"]
 
 -- xdl["_____"] = function() end
 	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
