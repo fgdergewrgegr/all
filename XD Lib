@@ -166,9 +166,10 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 			xdl["c_ao"] = xdl["create_ao"]; xdl["cao"] = xdl["c_ao"]
 			xdl["c_att"] = xdl["create_att"]; xdl["catt"] = xdl["c_att"]
 
--- xdl["_____"] = function() end
+-- xdl["_____"] = function() return  end
 	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
 	xdl["plrs"] = function() return ipairs(xdl.p:GetPlayers()) end
+	xdl["cam"] = function() return xdl.w.CurrentCamera end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
 
