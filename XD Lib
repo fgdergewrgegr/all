@@ -82,7 +82,7 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 			xdl["g_get_limbs"] = xdl["get_limbs"]; xdl["gl"] = xdl["g_get_limbs"]
 			xdl["g_get_my_char_child"] = xdl["get_my_char_child"]; xdl["gmcc"] = xdl["g_get_my_char_child"]
 
-	-- ♥xdl:creates♥
+	-- ♥creates♥
 		function xdl:create_blv(parent, name, value) local bv = Instance.new("BoolValue", parent); bv.Value = value; bv.Name = name; return bv end
 		function xdl:create_ov(parent, name, value) local ov = Instance.new("ObjectValue", parent); ov.Value = value; ov.Name = name; return ov end
 		function xdl:create_sv(parent, name, value) local sv = Instance.new("StringValue", parent); sv.Value = value; sv.Name = name; return sv end
