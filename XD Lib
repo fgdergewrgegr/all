@@ -17,6 +17,7 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 	xdl["m"] = xdl.me:GetMouse()
 	xdl["name"] = xdl.me.Name
 	xdl["dname"] = xdl.me.DisplayName
+	xdl["pg"] = xdl.me.PlayerGui
 
 -- xdl["_____"] = 
 	xdl["mhv3"] = Vector3.new("inf", "inf", "inf")
