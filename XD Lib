@@ -34,6 +34,7 @@ local timefunc, timefunc1 = os.clock(), os.clock(); print("XD Lib")
 	-- ♥others♥
 		function xdl:pcall(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
 		function xdl:magnitude(pos1, pos2) return (xdl:convert("Vector3", pos1) - xdl:convert("Vector3", pos2)).Magnitude end
+		function xdl:die() xdl.hum().Health = 0 end
 		
 		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
 			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
