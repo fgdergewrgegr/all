@@ -105,6 +105,14 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 		function xdl:get_my_char_child(name) return xdl:ffc(xdl.char(), name) or xdl:wfc(xdl.char(), name) end
 		function xdl:get_plr(obj) if not(obj) then return xdl.me else local char = xdl:get_char(obj); for _,plr in xdl.plrs() do if char == plr.Character then return plr end end end end
 
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["g_get_func_time"] = xdl["get_func_time"]; xdl["gft"] = xdl["g_get_func_time"]
+			xdl["g_get_parents"] = xdl["get_parents"]; xdl["gp"] = xdl["g_get_parents"]
+			xdl["g_get_char"] = xdl["get_char"]; xdl["gc"] = xdl["g_get_char"]
+			xdl["g_get_char_child"] = xdl["get_char_child"]; xdl["gcc"] = xdl["g_get_char_child"]
+			xdl["g_get_limbs"] = xdl["get_limbs"]; xdl["gl"] = xdl["g_get_limbs"]
+			xdl["g_get_my_char_child"] = xdl["get_my_char_child"]; xdl["gmcc"] = xdl["g_get_my_char_child"]
+
 	-- ♥creates♥
 		function xdl:create_blv(parent, name, value) local bv = Instance.new("BoolValue", parent); bv.Value = value; bv.Name = name; return bv end
 		function xdl:create_ov(parent, name, value) local ov = Instance.new("ObjectValue", parent); ov.Value = value; ov.Name = name; return ov end
