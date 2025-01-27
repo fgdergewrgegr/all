@@ -235,6 +235,6 @@ local logo = {
 	"							   ,M'`Mb.     MM     ,MP       MM      ,   MM  MM     M8",
 	"							  ,P   `MM.    MM    ,dP'       MM     ,M   MM  MM.   ,M9",
 	"							.MM:.  .:MMa..JMMmmmdP'       .JMMmmmmMMM .JMML.P^YbmdP' "
-}; print(xdl:c("s", logo))
+}; print(xdl:c("s", logo, "\n"))
 
 return xdl
