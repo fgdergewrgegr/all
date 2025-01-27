@@ -76,15 +76,15 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
 		function xdl:check_hum(hum) if hum and hum.Health ~= 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then return hum end end
         function xdl:check_friend(plr2, plr1) plr2 = xdl:convert("plr", plr2); plr1 = xdl:convert("id", plr1); if not(plr1) then plr1 = xdl.usid end
-        if plr["IsFriendsWith"] then if varrrrrrrr then
+        if plr["IsFriendsWith"] then if true then
             if not(plr:GetAttribute("Friend")) then plr:SetAttribute("Friend", plr:IsFriendsWith(xdl.usid)); return plr:IsFriendsWith(xdl.usid)
 			else return plr:GetAttribute("Friend") end
         else return plr:IsFriendsWith(xdl.usid) end end end
 		
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
-			xdl["c_friend"] = xdl["check_friend"]; xdl["cf"] = xdl["c_friend"]
 			xdl["c_list"] = xdl["check_list"]; xdl["cl"] = xdl["c_list"]
 			xdl["c_hum"] = xdl["check_hum"]; xdl["ch"] = xdl["c_hum"]
+			xdl["c_friend"] = xdl["check_friend"]; xdl["cf"] = xdl["c_friend"]
 
 	-- ♥gets♥
 		function get_time(cmd, svar)
@@ -107,11 +107,12 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 
 		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
 			xdl["g_get_func_time"] = xdl["get_func_time"]; xdl["gft"] = xdl["g_get_func_time"]
-			xdl["g_get_parents"] = xdl["get_parents"]; xdl["gp"] = xdl["g_get_parents"]
+			xdl["g_parents"] = xdl["get_parents"]; xdl["gpr"] = xdl["g_parents"]
 			xdl["g_get_char"] = xdl["get_char"]; xdl["gc"] = xdl["g_get_char"]
 			xdl["g_get_char_child"] = xdl["get_char_child"]; xdl["gcc"] = xdl["g_get_char_child"]
 			xdl["g_get_limbs"] = xdl["get_limbs"]; xdl["gl"] = xdl["g_get_limbs"]
 			xdl["g_get_my_char_child"] = xdl["get_my_char_child"]; xdl["gmcc"] = xdl["g_get_my_char_child"]
+			xdl["g_plr"] = xdl["get_plr"]; xdl["gp"] = xdl["g_plr"]
 
 	-- ♥creates♥
 		function xdl:create_blv(parent, name, value) local bv = Instance.new("BoolValue", parent); bv.Value = value; bv.Name = name; return bv end
@@ -157,6 +158,42 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 		function xdl:create_ao(parent, name, att) local ao = Instance.new("AlignOrientation", parent); ao.MaxTorque = math.huge; ao.Name = name
 		ao.Responsiveness = 200; ao.Mode = Enum.OrientationAlignmentMode.OneAttachment; ao.Attachment0 = att; return ao end
 		function xdl:create_att(parent, name) local att = Instance.new("Attachment", parent); att.Name = name; return att end
+
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["c_blv"] = xdl["create_blv"]; xdl["cblv"] = xdl["c_blv"]
+			xdl["c_ov"] = xdl["create_ov"]; xdl["cov"] = xdl["c_ov"]
+			xdl["c_sv"] = xdl["create_sv"]; xdl["csv"] = xdl["c_sv"]
+			xdl["c_nv"] = xdl["create_nv"]; xdl["cnv"] = xdl["c_nv"]
+			xdl["c_bp"] = xdl["create_bp"]; xdl["cbp"] = xdl["c_bp"]
+			xdl["c_bp1"] = xdl["create_bp1"]; xdl["cbp1"] = xdl["c_bp1"]
+			xdl["c_bp2"] = xdl["create_bp2"]; xdl["cbp2"] = xdl["c_bp2"]
+			xdl["c_bg"] = xdl["create_bg"]; xdl["cbg"] = xdl["c_bg"]
+			xdl["c_bg1"] = xdl["create_bg1"]; xdl["cbg1"] = xdl["c_bg1"]
+			xdl["c_bg2"] = xdl["create_bg2"]; xdl["cbg2"] = xdl["c_bg2"]
+			xdl["c_bv"] = xdl["create_bv"]; xdl["cbv"] = xdl["c_bv"]
+			xdl["c_bv1"] = xdl["create_bv1"]; xdl["cbv1"] = xdl["c_bv1"]
+			xdl["c_sb"] = xdl["create_sb"]; xdl["csb"] = xdl["c_sb"]
+			xdl["c_sb05"] = xdl["create_sb05"]; xdl["csb05"] = xdl["c_sb05"]
+			xdl["c_sb1"] = xdl["create_sb1"]; xdl["csb1"] = xdl["c_sb1"]
+			xdl["c_sb2"] = xdl["create_sb2"]; xdl["csb2"] = xdl["c_sb2"]
+			xdl["c_sb3"] = xdl["create_sb3"]; xdl["csb3"] = xdl["c_sb3"]
+			xdl["c_spl"] = xdl["create_spl"]; xdl["cspl"] = xdl["c_spl"]
+			xdl["c_spl1"] = xdl["create_spl1"]; xdl["cspl1"] = xdl["c_spl1"]
+			xdl["c_spl15"] = xdl["create_spl15"]; xdl["cspl15"] = xdl["c_spl15"]
+			xdl["c_spl2"] = xdl["create_spl2"]; xdl["cspl2"] = xdl["c_spl2"]
+			xdl["c_spnl"] = xdl["create_spnl"]; xdl["cspnl"] = xdl["c_spnl"]
+			xdl["c_spnl1"] = xdl["create_spnl1"]; xdl["cspnl1"] = xdl["c_spnl1"]
+			xdl["c_md"] = xdl["create_md"]; xdl["cmd"] = xdl["c_md"]
+			xdl["c_v3v"] = xdl["create_v3v"]; xdl["cv3v"] = xdl["c_v3v"]
+			xdl["c_v3v1"] = xdl["create_v3v1"]; xdl["cv3v1"] = xdl["c_v3v1"]
+			xdl["c_bav"] = xdl["create_bav"]; xdl["cbav"] = xdl["c_bav"]
+			xdl["c_bav1"] = xdl["create_bav1"]; xdl["cbav1"] = xdl["c_bav1"]
+			xdl["c_prt"] = xdl["create_prt"]; xdl["cprt"] = xdl["c_prt"]
+			xdl["c_prt1"] = xdl["create_prt1"]; xdl["cprt1"] = xdl["c_prt1"]
+			xdl["c_prt2"] = xdl["create_prt2"]; xdl["cprt2"] = xdl["c_prt2"]
+			xdl["c_prt3"] = xdl["create_prt3"]; xdl["cprt3"] = xdl["c_prt3"]
+			xdl["c_ao"] = xdl["create_ao"]; xdl["cao"] = xdl["c_ao"]
+			xdl["c_att"] = xdl["create_att"]; xdl["catt"] = xdl["c_att"]
             
 -- xdl["_____"] = function() return  end
 	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
