@@ -1,7 +1,11 @@
 local xdl = {} -- local xdl = loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))()
 local timefunc, timefunc1 = os.clock(), os.clock()
-
-
+local write = writefile
+local read = readfile
+local dof = dofile
+local append = appendfile
+local del = delfile
+local hg = game:HttpGet
 
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
@@ -59,6 +63,7 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
+		function xdl:toautoexec(url, name) write("XDL/autoexec/"..name..".lua", hg(url)); local data = '_G.'..name..' = dofile("XDL/autoexec/'..name..'.lua")() or loadstring(game:HttpGet("'..url..'"))()'; write("XDL/output logs.txt", data); setclipboard(data); print("copied"data); return data end
 
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
