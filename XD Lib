@@ -57,8 +57,8 @@ local timefunc, timefunc1 = os.clock(), os.clock()
         function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
 		function xdl:duplicate(num, data) local lt = xdl.lt:c(); for a=0,num do lt:i(data) end; return unpack(lt:c()) end
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
-		function xd:taskspawn(func) task.spawn(func) end
-		function xd:taskdefer(func) task.defer(func) end
+		function xdl:taskspawn(func) task.spawn(func) end
+		function xdl:taskdefer(func) task.defer(func) end
 
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
