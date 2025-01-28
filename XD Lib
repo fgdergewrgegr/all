@@ -75,7 +75,8 @@ local hg = game.HttpGet
 				data:i("		_.G['"..name.."'] = loadstring(game:HttpGet('"..url.."'))() or true")
 				data:i("	end")
 			else data:i("	end") end
-			data:i("end"); append("XDL/autoexec.lua", xdl:c("s", data:c()))
+			data:i("end")
+			append("XDL/autoexec.lua", xdl:c("s", data:c(), "\n"))
 		end
 
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
@@ -262,9 +263,9 @@ xdl.lt = {} -- xdl.lt["_____"] = xdl["_____"]
 	xdl.lt["insert"] = table.insert
 	xdl.lt["ins"] = table.insert
 	xdl.lt["i"] = table.insert
-	xdl.lt["clear"] = function(lt) for _,obj in lt do if typeof(obj) == "function" and table.find(lt, obj) then table.remove(lt, table.find(lt, obj)) end end; return lt end
-	xdl.lt["clr"] = xdl.lt["tofor"]
-	xdl.lt["c"] = xdl.lt["tofor"]
+	xdl.lt["clear"] = function(lt) for i,obj in lt do if obj == xdl.lt[i] then lt[i] = nil end end return lt end
+	xdl.lt["clr"] = xdl.lt["clear"]
+	xdl.lt["c"] = xdl.lt["clear"]
 
 local logo = {"",
 	"							'YMM'   `MP' `7MM'''Yb.       `7MMF'        db *MM       ",
