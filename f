@@ -1,1 +1,3 @@
-print(xd)
+return function(f)
+  print(f)
+end
