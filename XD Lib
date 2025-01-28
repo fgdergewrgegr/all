@@ -74,10 +74,6 @@ local hg = game.HttpGet
 				data:i("	else")
 				data:i("		_.G['"..name.."'] = loadstring(game:HttpGet('"..url.."'))() or true")
 				data:i("	end")
-				"if not(_.G["..name.."]) then",
-				"	if isfile("..path..") then",
-				"		dofile("..path..")()",
-				"	else",
 			else data:i("	end") end
 			data:i("end"); append("XDL/autoexec.lua", xdl:c("s", data:c()))
 		end
