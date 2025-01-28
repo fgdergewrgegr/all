@@ -5,7 +5,6 @@ local read = readfile
 local dof = dofile
 local append = appendfile
 local del = delfile
-local hg = game.HttpGet
 
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
@@ -65,7 +64,7 @@ local hg = game.HttpGet
 		function xdl:taskdefer(func) task.defer(func) end
 		function xdl:toautoexec(name, url, t)
 			local path = "XDL/autoexec/"..name..".lua"
-			write(path, (t and url) or hg(url))
+			write(path, (t and url) or game:HttpGet(url))
 			local data = xdl.lt:cl()
 			data:i("if not(_.G['"..name.."']) then")
 			data:i("	if isfile('"..path.."') then")
