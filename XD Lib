@@ -53,12 +53,14 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 		function xdl:suicide() xdl.hum().Health = 0 end
         function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
 		function xdl:duplicate(num, data) local lt = xdl.lt:c(); for a=0,num do lt:i(data) end; return unpack(lt:c()) end
-		
+		function xdl:charadded(func) xdl.me.CharacterAdded:Connect(func) end
+
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
 			xdl["mag"] = xdl["magnitude"]; xdl["mg"] = xdl["mag"]
 			xdl["playa"] = xdl["playanim"]; xdl["pa"] = xdl["playa"]
 			xdl["dplct"] = xdl["duplicate"]; xdl["dpl"] = xdl["dplct"]
+			xdl["chara"] = xdl["charadded"]; xdl["ca"] = xdl["chara"]
 
 	-- ♥fwcd♥
 		function xdl:ffc(parent, name) return parent:FindFirstChild(xdl:convert("Name", name)) end
