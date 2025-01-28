@@ -220,7 +220,7 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 	xdl["plrs"] = function() return ipairs(xdl.p:GetPlayers()) end
 	xdl["cam"] = function() return xdl.w.CurrentCamera end
     xdl["grt"] = function() return xdl.p.RespawnTime end
-    xdl["update"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))() end
+    xdl["update"] = function() local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return loadstring(data)() end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
 
