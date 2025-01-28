@@ -53,14 +53,12 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 		function xdl:suicide() xdl.hum().Health = 0 end
         function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
 		function xdl:duplicate(num, data) local lt = xdl.lt:c(); for a=0,num do lt:i(data) end; return unpack(lt:c()) end
-		function xdl:charadded(func) xdl.me.CharacterAdded:Connect(func) end
 
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
 			xdl["mag"] = xdl["magnitude"]; xdl["mg"] = xdl["mag"]
 			xdl["playa"] = xdl["playanim"]; xdl["pa"] = xdl["playa"]
 			xdl["dplct"] = xdl["duplicate"]; xdl["dpl"] = xdl["dplct"]
-			xdl["chara"] = xdl["charadded"]; xdl["ca"] = xdl["chara"]
 
 	-- ♥fwcd♥
 		function xdl:ffc(parent, name) return parent:FindFirstChild(xdl:convert("Name", name)) end
@@ -115,6 +113,13 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 			xdl["g_get_limbs"] = xdl["get_limbs"]; xdl["gl"] = xdl["g_get_limbs"]
 			xdl["g_get_my_char_child"] = xdl["get_my_char_child"]; xdl["gmcc"] = xdl["g_get_my_char_child"]
 			xdl["g_plr"] = xdl["get_plr"]; xdl["gp"] = xdl["g_plr"]
+
+	--♥connects♥
+		function xdl:connect_char_added(func) xdl.me.CharacterAdded:Connect(func) end
+
+		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
+			xdl["c_char_added"] = xdl["connect_char_added"]; xdl["cca"] = xdl["c_char_added"]
+
 
 	-- ♥creates♥
 		function xdl:create_blv(parent, name, value) local bv = Instance.new("BoolValue", parent); bv.Value = value; bv.Name = name; return bv end
