@@ -227,7 +227,7 @@ xdl.lt = {} -- xdl.lt["_____"] = xdl["_____"]
 	xdl.lt["clr"] = xdl.lt["tofor"]
 	xdl.lt["c"] = xdl.lt["tofor"]
 
-local logo = {
+local logo = {"",
 	"							'YMM'   `MP' `7MM'''Yb.       `7MMF'        db *MM       ",
 	"							  VMb.  ,P     MM    `Yb.       MM              MM       ",
 	"							   `MM.M'      MM     `Mb       MM        `7MM  MM,dMMb. ",
