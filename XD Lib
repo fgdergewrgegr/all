@@ -116,9 +116,11 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 
 	--♥connects♥
 		function xdl:connect_char_added(func) xdl.me.CharacterAdded:Connect(func) end
+		function xdl:connect_input_begin(func) xdl.uis.InputBegan:Connect(func) end
 
 		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
 			xdl["c_char_added"] = xdl["connect_char_added"]; xdl["cca"] = xdl["c_char_added"]
+			xdl["c_input_begin"] = xdl["connect_input_begin"]; xdl["cib"] = xdl["c_input_begin"]
 
 
 	-- ♥creates♥
