@@ -17,6 +17,7 @@ local timefunc, timefunc1 = os.clock(), os.clock()
 
 -- xdl["_____"] = xdl._____.
 	xdl["me"] = xdl.p.LocalPlayer
+	xdl["char"] = xdl.me.Character
     xdl["cam"] = xdl.w.CurrentCamera
 	xdl["m"] = xdl.me:GetMouse()
 	xdl["name"] = xdl.me.Name
