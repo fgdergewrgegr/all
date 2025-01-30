@@ -67,12 +67,12 @@ local del = delfile
 			local path = "XDL/autoexec/"..name..".lua"
 			write(path, (t and url) or game:HttpGet(url))
 			local data = xdl.lt:cl()
-			data:i("if not(_.G['"..name.."']) then")
+			data:i("if not(_G['"..name.."']) then")
 			data:i("	if isfile('"..path.."') then")
-			data:i("		_.G['"..name.."'] = dofile('"..path.."')() or true")
+			data:i("		_G['"..name.."'] = dofile('"..path.."')() or true")
 			if not(t) then
 				data:i("	else")
-				data:i("		_.G['"..name.."'] = loadstring(game:HttpGet('"..url.."'))() or true")
+				data:i("		_G['"..name.."'] = loadstring(game:HttpGet('"..url.."'))() or true")
 				data:i("	end")
 			else data:i("	end") end
 			data:i("end")
