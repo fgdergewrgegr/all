@@ -241,7 +241,7 @@ local del = delfile
     xdl["iy"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end
     xdl["dex"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))() end
     xdl["vhsiy"] = function() return loadstring(game:HttpGet('https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY'))() end
-    xdl["update"] = function() local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return loadstring(data)() end
+    xdl["update"] = function() print("Updating..."); local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return loadstring(data)() end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
 
