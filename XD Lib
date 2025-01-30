@@ -62,7 +62,7 @@ local del = delfile
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
-		function xdl:run
+		-- function xdl:run
 		function xdl:toautoexec(name, url, t)
 			local path = "XDL/autoexec/"..name..".lua"
 			write(path, (t and url) or game:HttpGet(url))
