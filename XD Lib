@@ -62,6 +62,7 @@ local del = delfile
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
+		function xdl:run
 		function xdl:toautoexec(name, url, t)
 			local path = "XDL/autoexec/"..name..".lua"
 			write(path, (t and url) or game:HttpGet(url))
@@ -151,7 +152,6 @@ local del = delfile
 			xdl["c_char_added"] = xdl["connect_char_added"]; xdl["cca"] = xdl["c_char_added"]
 			xdl["c_input_begin"] = xdl["connect_input_begin"]; xdl["cib"] = xdl["c_input_begin"]
 
-
 	-- ♥creates♥
 		function xdl:create_blv(parent, name, value) local bv = Instance.new("BoolValue", parent); bv.Value = value; bv.Name = name; return bv end
 		function xdl:create_ov(parent, name, value) local ov = Instance.new("ObjectValue", parent); ov.Value = value; ov.Name = name; return ov end
@@ -238,6 +238,9 @@ local del = delfile
 	xdl["plrs"] = function() return ipairs(xdl.p:GetPlayers()) end
 	xdl["cam"] = function() return xdl.w.CurrentCamera end
     xdl["grt"] = function() return xdl.p.RespawnTime end
+    xdl["iy"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end
+    xdl["dex"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))() end
+    xdl["vhsiy"] = function() return loadstring(game:HttpGet('https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY'))() end
     xdl["update"] = function() local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return loadstring(data)() end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
