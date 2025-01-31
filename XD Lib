@@ -41,6 +41,7 @@ local del = delfile
             ["cframe"] = function(data) if typeof(data) == "Instance" then return data.CFrame end end,
 			["char"] = function(data) if typeof(data) == "Instance" then return xdl:get_char(data) end end,
 			["player"] = function(data) if typeof(data) == "Instance" then return xdl:get_plr(data) end end,
+			["id"] = function(data) end,
 			["string"] = function(data, arg) if typeof(data) == "table" then if not(arg) then arg = "" end; for _,str in data do if _ == 1 then data = str else data = data..arg..str end end; return data end end,
 			["name"] = function(data) if typeof(data) == "Instance" then return data.Name end end
 		}; -- funcs["_____"] = funcs["_____"]; funcs["_____"] = funcs["_____"]
