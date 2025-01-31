@@ -58,11 +58,11 @@ local del = delfile
 		function xdl:magnitude(pos1, pos2) return (xdl:convert("Vector3", pos1) - xdl:convert("Vector3", pos2)).Magnitude end
 		function xdl:suicide() xdl.hum().Health = 0 end
         function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
-		function xdl:duplicate(num, data) local lt = xdl.lt:c(); for a=0,num do lt:i(data) end; return unpack(lt:c()) end
+		function xdl:duplicate(num, data) local lt = xdl.lt:cl(); for a=0,num do lt:i(data) end; return unpack(lt:c()) end
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
-		-- function xdl:run
+		-- function xdl:run()
 		function xdl:toautoexec(name, url, t)
 			local path = "XDL/autoexec/"..name..".lua"
 			write(path, (t and url) or game:HttpGet(url))
