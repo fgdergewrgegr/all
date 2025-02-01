@@ -1,19 +1,4 @@
 local xdl = {} -- local xdl = loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))()
-
---[[ for autoexec
-
-if not(_G['xdl']) then
-	if isfile('XDL/xdl.lua') then
-		_G['xdl'] = dofile('XDL/xdl.lua')() or true
-	else
-		local data = game:HttpGet('https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib')
-		_G['xdl'] = loadstring(data)
-		writefile('XDL/xdl.lua', data)
-	end
-end
-
-]]
-
 local timefunc, timefunc1 = os.clock(), os.clock()
 local write = writefile
 local read = readfile
@@ -24,6 +9,16 @@ local isf = isfile
 
 local str = tostring
 local int = tonumber
+
+--[[
+
+local path, xdl = "XDL/xdl.lua"
+if isfile(path) then xdl = dofile(path)()
+else local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib")
+task.defer(function() writefile(path, data) end)
+xdl = loadstring(data)() end
+
+]]
 
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
