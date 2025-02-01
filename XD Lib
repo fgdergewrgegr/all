@@ -125,7 +125,7 @@ local int = tonumber
 		function xdl:ffct(parent, names) for i,name in names do local obj = xdl:ffc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
 
 		function xdl:ffd(parent, name) return parent:FindFirstDescendant(xdl:convert("Name", name)) end
-		function xdl:ffds(parent, names) for i,name in names do names[i] = xdl:ffd(parent, name) end return unpack(names) end
+		function xdl:ffds(parent, ...) for i,name in names do names[i] = xdl:ffd(parent, name) end return unpack(names) end
 
 		function xdl:wfc(parent, ...) local lt = {...}; for i,name in lt do lt[i] = parent:WaitForChild(xdl:convert("Name", name)) end return unpack(lt) end
 		function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
@@ -297,14 +297,16 @@ xdl.lt = {} -- xdl.lt["_____"] = xdl["_____"]
 	xdl.lt["clr"] = xdl.lt["clear"]
 	xdl.lt["c"] = xdl.lt["clear"]
 
-local logo = {"",
-	"							'YMM'   `MP' `7MM'''Yb.	   `7MMF'		db *MM	   ",
-	"							  VMb.  ,P	 MM	`Yb.	   MM			  MM	   ",
-	"							   `MM.M'	  MM	 `Mb	   MM		`7MM  MM,dMMb. ",
-	"								 MMb	   MM	  MM	   MM		  MM  MM	`Mb",
-	"							   ,M'`Mb.	 MM	 ,MP	   MM	  ,   MM  MM	 M8",
-	"							  ,P   `MM.	MM	,dP'	   MM	 ,M   MM  MM.   ,M9",
-	"							.MM:.  .:MMa..JMMmmmdP'	   .JMMmmmmMMM .JMML.P^YbmdP' "
-}; print(xdl:c("s", logo, "\n"))
+print(
+	[[ 
+	'YMM'   `MP' `7MM'''Yb.	   `7MMF'		db *MM	   
+	  VMb.  ,P	 MM	`Yb.	   MM			  MM	   
+	   `MM.M'	  MM	 `Mb	   MM		`7MM  MM,dMMb. 
+		 MMb	   MM	  MM	   MM		  MM  MM	`Mb
+	   ,M'`Mb.	 MM	 ,MP	   MM	  ,   MM  MM	 M8
+	  ,P   `MM.	MM	,dP'	   MM	 ,M   MM  MM.   ,M9
+	.MM:.  .:MMa..JMMmmmdP'	   .JMMmmmmMMM .JMML.P^YbmdP' 
+	]]
+)
 
 return xdl
