@@ -91,10 +91,9 @@ local int = tonumber
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
-		function xdl:run(name, url) local path = "XDL/fastload/"..name.."/"; if url and not(isf(path)) then if memory then local data = game:HttpGet(url); write(path.."source.lua", data); write(path.."link.https", url); loadstring(data)()
-		else write(path.."source.lua", game:HttpGet(url)); write(path.."link.https", url); loadstring(game:HttpGet(url))() end
-		elseif isf(path) then xdl:td(function() write(path.."source.lua", game:HttpGet(read(path.."link.https"))) end); loadstring(read(path.."source.lua"))() end end
-
+		function xdl:run(name, url, t) local path = "XDL/fastload/"..name.."/"; if url then if not(t) then if not(isf(path)) then if memory then local data = game:HttpGet(url); write(path.."source.lua", data); write(path.."url.https", url); return loadstring(data)()
+		else write(path.."source.lua", game:HttpGet(url)); write(path.."url.https", url); return loadstring(game:HttpGet(url))() end else xdl:td(function() write(path.."source.lua", game:HttpGet(read(path.."url.https"))) end); return dof(path.."source.lua")() end
+		elseif isf(path) then return dof(path.."source.lua")() end elseif isf(path) then return dof(path.."source.lua")() end end
 		function xdl:toautoexec(name, url, t)
 			local path = "XDL/autoexec/"..name..".lua"
 			write(path, (t and url) or game:HttpGet(url))
