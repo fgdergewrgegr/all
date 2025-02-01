@@ -1,34 +1,53 @@
 local xdl = {} -- local xdl = loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))()
+
+--[[ for autoexec
+
+if not(_G['xdl']) then
+	if isfile('XDL/xdl.lua') then
+		_G['xdl'] = dofile('XDL/xdl.lua')() or true
+	else
+		local data = game:HttpGet('https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib')
+		_G['xdl'] = loadstring(data)
+		writefile('XDL/xdl.lua', data)
+	end
+end
+
+]]
+
 local timefunc, timefunc1 = os.clock(), os.clock()
 local write = writefile
 local read = readfile
 local dof = dofile
 local append = appendfile
 local del = delfile
+local isf = isfile
+
+local str = tostring
+local int = tonumber
 
 -- xdl["_____"] = game:GetService("_____")
 	xdl["w"] = game:GetService("Workspace")
-    xdl["l"] = game:GetService("Lighting")
+	xdl["l"] = game:GetService("Lighting")
 	xdl["p"] = game:GetService("Players")
 	xdl["r"] = game:GetService("RunService")
 	xdl["d"] = game:GetService("Debris")
 	xdl["rs"] = game:GetService("ReplicatedStorage")
 	xdl["rf"] = game:GetService("ReplicatedFirst")
 	xdl["sg"] = game:GetService("StarterGui")
-    xdl["cg"] = gethui() or game:GetService("CoreGui")
-    xdl["chat"] = game:GetService("Chat")
+	xdl["cg"] = gethui() or game:GetService("CoreGui")
+	xdl["chat"] = game:GetService("Chat")
 	xdl["hs"] = game:GetService("HttpService")
 	xdl["uis"] = game:GetService("UserInputService")
 
 -- xdl["_____"] = xdl._____.
 	xdl["me"] = xdl.p.LocalPlayer
 	xdl["char"] = xdl.me.Character
-    xdl["cam"] = xdl.w.CurrentCamera
+	xdl["cam"] = xdl.w.CurrentCamera
 	xdl["m"] = xdl.me:GetMouse()
 	xdl["name"] = xdl.me.Name
 	xdl["dname"] = xdl.me.DisplayName
 	xdl["pg"] = xdl.me.PlayerGui
-    xdl["usid"] = xdl.me.UserId
+	xdl["muid"] = xdl.me.UserId
 
 -- xdl["_____"] = 
 	xdl["mhv3"] = Vector3.new("inf", "inf", "inf")
@@ -38,11 +57,19 @@ local del = delfile
 	function xdl:convert(to, data, arg)
 		local funcs = { -- ["_____"] = function(data) return end,
 			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end end,
-            ["cframe"] = function(data) if typeof(data) == "Instance" then return data.CFrame end end,
-			["char"] = function(data) if typeof(data) == "Instance" then return xdl:get_char(data) end end,
-			["player"] = function(data) if typeof(data) == "Instance" then return xdl:get_plr(data) end end,
-			["id"] = function(data) end,
+			["cframe"] = function(data) if typeof(data) == "Instance" then return data.CFrame end end,
+			["char"] = function(data)
+				if typeof(data) == "Instance" then if memory then local plr = xdl.p:GetPlayerFromCharacter(data); if plr then return plr else for _,plr in xdl.plrs() do local char = plr.Character; if char and data:IsDescendantOf(char) then return char end end end
+				else if xdl.p:GetPlayerFromCharacter(data) then return xdl.p:GetPlayerFromCharacter(data) else for _,plr in xdl.plrs() do if plr.Character and data:IsDescendantOf(plr.Character) then return plr.Character end end end end
+				return (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) else return xdl:c("plr", data).Character or (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) end end,
+			["player"] = function(data)
+				if typeof(data) == "Instance" then return xdl.p:GetPlayerFromCharacter(data) or xdl:ffc(xdl.p, data.Name) or xdl:c("char", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
+				elseif typeof(data) == "number" then return xdl.p:GetPlayerByUserId(data) or xdl.plrs()[data] or xdl:ffp(xdl.plrs(), "FollowUserId", data) or xdl:ffp(xdl.plrs(), "AccountAge", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
+				elseif typeof(data) == "string" then return xdl:ffc(xdl.p, data) or xdl:ffp(xdl.plrs(), "DisplayName", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
+				else return (debugg and warn(typeof(data).."is not supported for find a player")) end end,
+			["id"] = function(data) if memory then local plr = xdl:c("plr", data); if plr then return plr.UserId end else return (xdl:c("plr", data) and xdl:c("plr", data).UserId) end end,
 			["string"] = function(data, arg) if typeof(data) == "table" then if not(arg) then arg = "" end; for _,str in data do if _ == 1 then data = str else data = data..arg..str end end; return data end end,
+			["readable_string"] = function(data) if typeof(data) == "table" then return "{"..xdl:c("s", data, ", ").."}" end end,
 			["name"] = function(data) if typeof(data) == "Instance" then return data.Name end end
 		}; -- funcs["_____"] = funcs["_____"]; funcs["_____"] = funcs["_____"]
 		funcs["vec3"] = funcs["vector3"]; funcs["v3"] = funcs["vec3"]
@@ -50,6 +77,7 @@ local del = delfile
 		funcs["cr"] = funcs["char"]; funcs["c"] = funcs["cr"]
 		funcs["plr"] = funcs["player"]; funcs["p"] = funcs["plr"]
 		funcs["str"] = funcs["string"]; funcs["s"] = funcs["str"]
+		funcs["r_str"] = funcs["readable_string"]; funcs["rs"] = funcs["r_str"]
 		funcs["nm"] = funcs["name"]; funcs["n"] = funcs["nm"]
 		return funcs[to:lower()](data, arg) or data
 	end; xdl["con"] = xdl["convert"]; xdl["c"] = xdl["con"]
@@ -58,12 +86,15 @@ local del = delfile
 		function xdl:pcall(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
 		function xdl:magnitude(pos1, pos2) return (xdl:convert("Vector3", pos1) - xdl:convert("Vector3", pos2)).Magnitude end
 		function xdl:suicide() xdl.hum().Health = 0 end
-        function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
+		function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
 		function xdl:duplicate(num, data) local lt = xdl.lt:cl(); for a=0,num do lt:i(data) end; return unpack(lt:c()) end
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
-		-- function xdl:run()
+		function xdl:run(name, url) local path = "XDL/fastload/"..name.."/"; if url and not(isf(path)) then if memory then local data = game:HttpGet(url); write(path.."source.lua", data); write(path.."link.https", url); loadstring(data)()
+		else write(path.."source.lua", game:HttpGet(url)); write(path.."link.https", url); loadstring(game:HttpGet(url))() end
+		elseif isf(path) then xdl:td(function() write(path.."source.lua", game:HttpGet(read(path.."link.https"))) end); loadstring(read(path.."source.lua"))() end end
+
 		function xdl:toautoexec(name, url, t)
 			local path = "XDL/autoexec/"..name..".lua"
 			write(path, (t and url) or game:HttpGet(url))
@@ -89,26 +120,23 @@ local del = delfile
 			xdl["tspawn"] = xdl["taskspawn"]; xdl["ts"] = xdl["tspawn"]
 			xdl["tdefer"] = xdl["taskdefer"]; xdl["td"] = xdl["tdefer"]
 
-	-- ♥fwcd♥
-		function xdl:ffc(parent, name) return parent:FindFirstChild(xdl:convert("Name", name)) end
-		function xdl:ffcs(parent, names) for i,name in names do names[i] = xdl:ffc(parent, name) end return  unpack(names) end
+	-- ♥fwcdp♥
+		function xdl:ffc(parent, ...) local lt = {...}; for i,name in lt do lt[i] = parent:FindFirstChild(xdl:convert("Name", name)) end return unpack(lt) end
 		function xdl:ffct(parent, names) for i,name in names do local obj = xdl:ffc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
 
 		function xdl:ffd(parent, name) return parent:FindFirstDescendant(xdl:convert("Name", name)) end
 		function xdl:ffds(parent, names) for i,name in names do names[i] = xdl:ffd(parent, name) end return unpack(names) end
 
-		function xdl:wfc(parent, name) return parent:WaitForChild(xdl:convert("Name", name)) end
-		function xdl:wfcs(parent, names) for i,name in names do names[i] = xdl:wfc(parent, name) end return unpack(names) end
+		function xdl:wfc(parent, ...) local lt = {...}; for i,name in lt do lt[i] = parent:WaitForChild(xdl:convert("Name", name)) end return unpack(lt) end
 		function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
+
+		function xdl:ffp(objs, prop, ...) local lt = {...}; for _,obj in pairs(objs) do local s, v = pcall(function() if table.maxn(lt) ~= 0 then for _,v in lt do if obj[prop] == v then return obj[prop] end end else return obj[prop] end end); if s then return v end end end
 
 	-- ♥checks♥
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
 		function xdl:check_hum(hum) if hum and hum.Health ~= 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then return hum end end
-        function xdl:check_friend(plr2, plr1) plr2 = xdl:convert("plr", plr2); plr1 = xdl:convert("id", plr1); if not(plr1) then plr1 = xdl.usid end
-        if plr["IsFriendsWith"] then if true then
-            if not(plr:GetAttribute("Friend")) then plr:SetAttribute("Friend", plr:IsFriendsWith(xdl.usid)); return plr:IsFriendsWith(xdl.usid)
-			else return plr:GetAttribute("Friend") end
-        else return plr:IsFriendsWith(xdl.usid) end end end
+		function xdl:check_friend(plr2, id) if not(id) then id = xdl.usid end; plr2 = xdl:convert("plr", plr2); id = xdl:convert("id", id); if plr["IsFriendsWith"] then
+		if memory then if plr:GetAttribute("Friend") == nil then plr:SetAttribute("Friend", plr:IsFriendsWith(id)) return plr:IsFriendsWith(id) else return plr:GetAttribute("Friend") end else return plr:IsFriendsWith(id) end end end
 		
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["c_list"] = xdl["check_list"]; xdl["cl"] = xdl["c_list"]
@@ -128,16 +156,14 @@ local del = delfile
 		end; xdl["g_time"] = xdl["get_time"]; xdl["gt"] = xdl["g_time"]
 		function xdl:get_func_time(func) local var = os.clock(); func(); return get_time("rv", var) end
 		function xdl:get_parents(obj) if obj.Parent then local p = obj; local tree = {obj} while p.Parent do p = p.Parent; table.insert(tree, p) end; return tree end end
-		function xdl:get_char(obj) if not(obj) then obj = xdl.me end; for _,plr in xdl.plrs() do local char = plr.Character; if obj == plr or (char and obj:IsDescendantOf(char)) then return char end end end
-		function xdl:get_char_child(name, obj) return xdl:get_char(obj) and xdl:ffc(xdl:get_char(obj), xdl:convert("Name", name)) end
+		
+		function xdl:get_char_child(name, obj) return xdl:c("char", obj) and xdl:ffc(xdl:c("char", obj), xdl:convert("Name", name)) end
 		function xdl:get_limbs(obj) return xdl:get_char_child("Right Arm", obj), xdl:get_char_child("Right Leg", obj), xdl:get_char_child("Left Arm", obj), xdl:get_char_child("Left Leg", obj) end
 		function xdl:get_my_char_child(name) return xdl:ffc(xdl.char(), name) or xdl:wfc(xdl.char(), name) end
-		function xdl:get_plr(obj) if not(obj) then return xdl.me else local char = xdl:get_char(obj); for _,plr in xdl.plrs() do if char == plr.Character then return plr end end end end
 
 		-- xdl[""] = xdl[""]; xdl[""] = xdl[""]
 			xdl["g_get_func_time"] = xdl["get_func_time"]; xdl["gft"] = xdl["g_get_func_time"]
 			xdl["g_parents"] = xdl["get_parents"]; xdl["gpr"] = xdl["g_parents"]
-			xdl["g_get_char"] = xdl["get_char"]; xdl["gc"] = xdl["g_get_char"]
 			xdl["g_get_char_child"] = xdl["get_char_child"]; xdl["gcc"] = xdl["g_get_char_child"]
 			xdl["g_get_limbs"] = xdl["get_limbs"]; xdl["gl"] = xdl["g_get_limbs"]
 			xdl["g_get_my_char_child"] = xdl["get_my_char_child"]; xdl["gmcc"] = xdl["g_get_my_char_child"]
@@ -233,16 +259,17 @@ local del = delfile
 			xdl["c_prt3"] = xdl["create_prt3"]; xdl["cprt3"] = xdl["c_prt3"]
 			xdl["c_ao"] = xdl["create_ao"]; xdl["cao"] = xdl["c_ao"]
 			xdl["c_att"] = xdl["create_att"]; xdl["catt"] = xdl["c_att"]
-            
+			
 -- xdl["_____"] = function() return  end
 	xdl["tah"] = function() return xdl.m.Target, xdl.m.Hit end
 	xdl["plrs"] = function() return ipairs(xdl.p:GetPlayers()) end
+	xdl["muid"] = function() return xdl.me.UserId end
 	xdl["cam"] = function() return xdl.w.CurrentCamera end
-    xdl["grt"] = function() return xdl.p.RespawnTime end
-    xdl["iy"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end
-    xdl["dex"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))() end
-    xdl["vhsiy"] = function() return loadstring(game:HttpGet('https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY'))() end
-    xdl["update"] = function() print("Updating..."); local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return write("XDL/xdl.lua", data) end
+	xdl["grt"] = function() return xdl.p.RespawnTime end
+	xdl["iy"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end
+	xdl["dex"] = function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))() end
+	xdl["vhsiy"] = function() return loadstring(game:HttpGet('https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY'))() end
+	xdl["update"] = function() print("Updating..."); local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return write("XDL/xdl.lua", data) end
 
 	xdl["char"] = function() return xdl.me.Character or (xdl.me.CharacterAdded:Wait() and xdl.me.Character) end
 
@@ -271,13 +298,13 @@ xdl.lt = {} -- xdl.lt["_____"] = xdl["_____"]
 	xdl.lt["c"] = xdl.lt["clear"]
 
 local logo = {"",
-	"							'YMM'   `MP' `7MM'''Yb.       `7MMF'        db *MM       ",
-	"							  VMb.  ,P     MM    `Yb.       MM              MM       ",
-	"							   `MM.M'      MM     `Mb       MM        `7MM  MM,dMMb. ",
-	"								 MMb       MM      MM       MM          MM  MM    `Mb",
-	"							   ,M'`Mb.     MM     ,MP       MM      ,   MM  MM     M8",
-	"							  ,P   `MM.    MM    ,dP'       MM     ,M   MM  MM.   ,M9",
-	"							.MM:.  .:MMa..JMMmmmdP'       .JMMmmmmMMM .JMML.P^YbmdP' "
+	"							'YMM'   `MP' `7MM'''Yb.	   `7MMF'		db *MM	   ",
+	"							  VMb.  ,P	 MM	`Yb.	   MM			  MM	   ",
+	"							   `MM.M'	  MM	 `Mb	   MM		`7MM  MM,dMMb. ",
+	"								 MMb	   MM	  MM	   MM		  MM  MM	`Mb",
+	"							   ,M'`Mb.	 MM	 ,MP	   MM	  ,   MM  MM	 M8",
+	"							  ,P   `MM.	MM	,dP'	   MM	 ,M   MM  MM.   ,M9",
+	"							.MM:.  .:MMa..JMMmmmdP'	   .JMMmmmmMMM .JMML.P^YbmdP' "
 }; print(xdl:c("s", logo, "\n"))
 
 return xdl
