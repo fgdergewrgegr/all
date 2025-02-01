@@ -58,7 +58,7 @@ xdl = loadstring(data)() end
 				else if xdl.p:GetPlayerFromCharacter(data) then return xdl.p:GetPlayerFromCharacter(data) else for _,plr in xdl.plrs() do if plr.Character and data:IsDescendantOf(plr.Character) then return plr.Character end end end end
 				return (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) else return xdl:c("plr", data).Character or (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) end end,
 			["player"] = function(data)
-				if typeof(data) == "Instance" then return xdl.p:GetPlayerFromCharacter(data) or xdl:ffc(xdl.p, data.Name) or xdl:c("char", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
+				if typeof(data) == "Instance" and not(data:IsA("Player")) then return xdl.p:GetPlayerFromCharacter(data) or xdl:ffc(xdl.p, data.Name) or xdl:c("char", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 				elseif typeof(data) == "number" then return xdl.p:GetPlayerByUserId(data) or xdl.plrs()[data] or xdl:ffp(xdl.plrs(), "FollowUserId", data) or xdl:ffp(xdl.plrs(), "AccountAge", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 				elseif typeof(data) == "string" then return xdl:ffc(xdl.p, data) or xdl:ffp(xdl.plrs(), "DisplayName", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 				else return (debugg and warn(typeof(data).."is not supported for find a player")) end end,
