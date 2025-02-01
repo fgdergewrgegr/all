@@ -130,7 +130,7 @@ xdl = loadstring(data)() end
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
 		function xdl:check_hum(hum) if hum and hum.Health ~= 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then return hum end end
 		function xdl:check_friend(plr2, id) if not(id) then id = xdl.usid end; plr2 = xdl:convert("plr", plr2); id = xdl:convert("id", id); if plr2["IsFriendsWith"] then
-		if memory then if plr2:GetAttribute("Friend") == nil then plr2:SetAttribute("Friend", plr2:IsFriendsWith(id)) return plr2:IsFriendsWith(id) else return plr2:GetAttribute("Friend") end else return plr2:IsFriendsWith(id) end end end
+		if memory then if plr2:GetAttribute("Friend") == nil then local t = plr2:IsFriendsWith(id); plr2:SetAttribute("Friend", t); return t else return plr2:GetAttribute("Friend") end else return plr2:IsFriendsWith(id) end end end
 		
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["c_list"] = xdl["check_list"]; xdl["cl"] = xdl["c_list"]
