@@ -121,8 +121,8 @@ xdl = loadstring(data)() end
 
 	--♥pcalls♥
 		function xdl:pcall_print(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
-		function xdl:pcall_return(text, func) local s,e = pcall(func); if s then return e end end
-		function xdl:pcall_return_error(text, func) local s,e = pcall(func); return e end
+		function xdl:pcall_return(func) local s,e = pcall(func); if s then return e end end
+		function xdl:pcall_return_error(func) local s,e = pcall(func); return e end
 
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["p_print"] = xdl["pcall_print"]; xdl["pp"] = xdl["p_print"]
