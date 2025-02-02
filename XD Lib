@@ -85,7 +85,6 @@ xdl = loadstring(data)() end
 	end; xdl["con"] = xdl["convert"]; xdl["c"] = xdl["con"]
 
 	-- ♥others♥
-		function xdl:pcall(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
 		function xdl:magnitude(pos1, pos2) return (xdl:convert("Vector3", pos1) - xdl:convert("Vector3", pos2)).Magnitude end
 		function xdl:suicide() xdl.hum().Health = 0 end
 		function xdl:playanim(rbxid) if xdl.hum():FindFirstChild("Animator") then local animator = xdl.hum().Animator local anim = Instance.new("Animation") anim.AnimationId = rbxid animator:LoadAnimation(anim):Play() end end 
@@ -113,13 +112,22 @@ xdl = loadstring(data)() end
 		end
 
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
-			xdl["pcl"] = xdl["pcall"]; xdl["pc"] = xdl["pcl"]
 			xdl["mag"] = xdl["magnitude"]; xdl["mg"] = xdl["mag"]
 			xdl["playa"] = xdl["playanim"]; xdl["pa"] = xdl["playa"]
 			xdl["dplct"] = xdl["duplicate"]; xdl["dpl"] = xdl["dplct"]
 			xdl["upgrd"] = xdl["upgrade"]; xdl["upg"] = xdl["upgrd"]
 			xdl["tspawn"] = xdl["taskspawn"]; xdl["ts"] = xdl["tspawn"]
 			xdl["tdefer"] = xdl["taskdefer"]; xdl["td"] = xdl["tdefer"]
+
+	--♥pcalls♥
+		function xdl:pcall_print(text, func) local s,e = pcall(func); if not(s) then print(e); if text then print(text) end end end
+		function xdl:pcall_return(text, func) local s,e = pcall(func); if s then return e end end
+		function xdl:pcall_return_error(text, func) local s,e = pcall(func); return e end
+
+		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
+			xdl["p_print"] = xdl["pcall_print"]; xdl["pp"] = xdl["p_print"]
+			xdl["p_return"] = xdl["pcall_return"]; xdl["pr"] = xdl["p_return"]
+			xdl["pr_error"] = xdl["pcall_return_error"]; xdl["pre"] = xdl["pr_error"]
 
 	-- ♥fwcdp♥
 		function xdl:ffc(parent, ...) local lt = {...}; for i,name in lt do lt[i] = parent:FindFirstChild(xdl:convert("Name", name)) end return unpack(lt) end
@@ -136,8 +144,8 @@ xdl = loadstring(data)() end
 	-- ♥checks♥
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
 		function xdl:check_hum(hum) if hum and hum.Health ~= 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then return hum end end
-		function xdl:check_friend(plr2, id) if not(id) then id = xdl.usid end; plr2 = xdl:convert("plr", plr2); id = xdl:convert("id", id); if plr2:FindFirstChild("IsFriendsWith") then
-		if _G.xdl_memory then if plr2:GetAttribute("Friend") == nil then local t = plr2:IsFriendsWith(id); plr2:SetAttribute("Friend", t); return t else return plr2:GetAttribute("Friend") end else return plr2:IsFriendsWith(id) end end end
+		function xdl:check_friend(plr2, id) if not(id) then id = xdl.usid end; plr2 = xdl:convert("plr", plr2); id = xdl:convert("id", id)
+		if _G.xdl_memory then if plr2:GetAttribute("Friend") == nil then local t = plr2:IsFriendsWith(id); plr2:SetAttribute("Friend", t); return t else return plr2:GetAttribute("Friend") end else return plr2:IsFriendsWith(id) end end
 		
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["c_list"] = xdl["check_list"]; xdl["cl"] = xdl["c_list"]
