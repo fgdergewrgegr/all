@@ -1,4 +1,11 @@
 local xdl = {} -- local xdl = loadstring(game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"))()
+
+xdl.config = {
+	debug = false,
+	reduce_global_functions = false
+}
+-- if isfile("XDL/config.cfg") then for 
+
 local timefunc, timefunc1 = os.clock(), os.clock()
 local write = writefile
 local read = readfile
@@ -54,7 +61,7 @@ xdl = loadstring(data)() end
 			["vector3"] = function(data) if data:IsA("BasePart") then return data.Position end end,
 			["cframe"] = function(data) if typeof(data) == "Instance" then return data.CFrame end end,
 			["char"] = function(data)
-				if typeof(data) == "Instance" then if memory then local plr = xdl.p:GetPlayerFromCharacter(data); if plr then return plr else for _,plr in xdl.plrs() do local char = plr.Character; if char and data:IsDescendantOf(char) then return char end end end
+				if typeof(data) == "Instance" then if _G.xdl_memory then local plr = xdl.p:GetPlayerFromCharacter(data); if plr then return plr else for _,plr in xdl.plrs() do local char = plr.Character; if char and data:IsDescendantOf(char) then return char end end end
 				else if xdl.p:GetPlayerFromCharacter(data) then return xdl.p:GetPlayerFromCharacter(data) else for _,plr in xdl.plrs() do if plr.Character and data:IsDescendantOf(plr.Character) then return plr.Character end end end end
 				return (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) else return xdl:c("plr", data).Character or (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) end end,
 			["player"] = function(data)
@@ -62,7 +69,7 @@ xdl = loadstring(data)() end
 				elseif typeof(data) == "number" then return xdl.p:GetPlayerByUserId(data) or xdl.plrs()[data] or xdl:ffp(xdl.plrs(), "FollowUserId", data) or xdl:ffp(xdl.plrs(), "AccountAge", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 				elseif typeof(data) == "string" then return xdl:ffc(xdl.p, data) or xdl:ffp(xdl.plrs(), "DisplayName", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 				else return (debugg and warn(typeof(data).."is not supported for find a player")) end end,
-			["id"] = function(data) if memory then local plr = xdl:c("plr", data); if plr then return plr.UserId end else return (xdl:c("plr", data) and xdl:c("plr", data).UserId) end end,
+			["id"] = function(data) if _G.xdl_memory then local plr = xdl:c("plr", data); if plr then return plr.UserId end else return (xdl:c("plr", data) and xdl:c("plr", data).UserId) end end,
 			["string"] = function(data, arg) if typeof(data) == "table" then if not(arg) then arg = "" end; for _,str in data do if _ == 1 then data = str else data = data..arg..str end end; return data end end,
 			["readable_string"] = function(data) if typeof(data) == "table" then return "{"..xdl:c("s", data, ", ").."}" end end,
 			["name"] = function(data) if typeof(data) == "Instance" then return data.Name end end
@@ -86,7 +93,7 @@ xdl = loadstring(data)() end
 		function xdl:upgrade(list) for i,v in xdl.lt do list[i] = v end; return list end
 		function xdl:taskspawn(func) task.spawn(func) end
 		function xdl:taskdefer(func) task.defer(func) end
-		function xdl:run(name, url, t) local path = "XDL/fastload/"..name.."/"; if url then if not(t) then if not(isf(path)) then if memory then local data = game:HttpGet(url); write(path.."source.lua", data); write(path.."url.https", url); return loadstring(data)()
+		function xdl:run(name, url, t) local path = "XDL/fastload/"..name.."/"; if url then if not(t) then if not(isf(path)) then if _G.xdl_memory then local data = game:HttpGet(url); write(path.."source.lua", data); write(path.."url.https", url); return loadstring(data)()
 		else write(path.."source.lua", game:HttpGet(url)); write(path.."url.https", url); return loadstring(game:HttpGet(url))() end else xdl:td(function() write(path.."source.lua", game:HttpGet(read(path.."url.https"))) end); return dof(path.."source.lua")() end
 		elseif isf(path) then return dof(path.."source.lua")() end elseif isf(path) then return dof(path.."source.lua")() end end
 		function xdl:toautoexec(name, url, t)
@@ -129,8 +136,8 @@ xdl = loadstring(data)() end
 	-- ♥checks♥
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
 		function xdl:check_hum(hum) if hum and hum.Health ~= 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then return hum end end
-		function xdl:check_friend(plr2, id) if not(id) then id = xdl.usid end; plr2 = xdl:convert("plr", plr2); id = xdl:convert("id", id); if plr2["IsFriendsWith"] then
-		if memory then if plr2:GetAttribute("Friend") == nil then local t = plr2:IsFriendsWith(id); plr2:SetAttribute("Friend", t); return t else return plr2:GetAttribute("Friend") end else return plr2:IsFriendsWith(id) end end end
+		function xdl:check_friend(plr2, id) if not(id) then id = xdl.usid end; plr2 = xdl:convert("plr", plr2); id = xdl:convert("id", id); if plr2:FindFirstChild("IsFriendsWith") then
+		if _G.xdl_memory then if plr2:GetAttribute("Friend") == nil then local t = plr2:IsFriendsWith(id); plr2:SetAttribute("Friend", t); return t else return plr2:GetAttribute("Friend") end else return plr2:IsFriendsWith(id) end end end
 		
 		-- xdl["_____"] = xdl["_____"]; xdl["_____"] = xdl["_____"]
 			xdl["c_list"] = xdl["check_list"]; xdl["cl"] = xdl["c_list"]
