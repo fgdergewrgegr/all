@@ -139,7 +139,7 @@ xdl = loadstring(data)() end
 		function xdl:wfc(parent, ...) local lt = {...}; for i,name in lt do lt[i] = parent:WaitForChild(xdl:convert("Name", name)) end return unpack(lt) end
 		function xdl:wfct(parent, names) for i,name in names do local obj = xdl:wfc(parent, name); if obj then parent = obj end; names[i] = obj end return unpack(names) end
 
-		function xdl:ffp(objs, prop, ...) local lt = {...}; for _,obj in pairs(objs) do local s, v = pcall(function() if table.maxn(lt) ~= 0 then for _,v in lt do if obj[prop] == v then return obj[prop] end end else return obj[prop] end end); if s then return v end end end
+		function xdl:ffp(objs, prop, ...) local lt = {...}; for _,obj in pairs(objs) do local s, v = pcall(function() if table.maxn(lt) ~= 0 then for _,v in lt do if obj[prop] == v then return obj end end else return obj end end); if s then return v end end end
 
 	-- ♥checks♥
 		function xdl:check_list(list, find) local i = table.find(list, find); if t then return list[i] end end
