@@ -1,5 +1,12 @@
 local luav = {
 	data = {
+		["Instance"] = {luav = true},
+		["string"] = {luav = true},
+		["table"] = {luav = true},
+		["Vector3"] = {luav = true},
+		["number"] = {luav = true},
+		["function"] = {luav = true}
+	}, metadata = {
 		["Instance"] = {},
 		["string"] = {},
 		["table"] = {},
@@ -12,6 +19,7 @@ local luav = {
 	iadds = {}
 }
 
+
 --[[
 
 local path, luav = "LuaV/LuaV.lua"
@@ -22,18 +30,6 @@ luav = loadstring(data)() end; path = nil
 
 ]]
 
-
-function LuaV(...)
-	local lt = {...}
-	for _,obj in lt do
-		local type = typeof(obj)
-		local stable = luav.data[type]
-		if obj and (type ~= "table" or not(obj["luav"])) and stable then
-			lt[_] = setmetatable({obj, luav = type}, {__index = function(s,arg) return stable[arg] or obj[arg] end})
-			if type == "table" then lt[_] = setmetatable(lt[_], {__add = function(lt1, lt2) lt1 = (lt1["luav"] and lt1[1]) or lt1; lt2 = (lt2["luav"] and lt2[1]) or lt2 for i,v in lt2 do if typeof(i) == "number" then lt1[#lt1+1] = v else lt1[i] = v end end return lt1 end}) end
-		end
-	end; return unpack(lt)
-end
 
 local f = luav.funcs
 local af = luav.addfuncs
@@ -79,6 +75,24 @@ local int = tonumber
 	o["mhv3"] = Vector3.new("inf", "inf", "inf")
 	o["nv3"] = Vector3.new()
 
+function LuaV(...)
+	local lt = {...}
+	for _,obj in lt do
+		local type = typeof(obj)
+		local stable = luav.data[type]
+		local metastable = luav.metadata[type]
+		if obj and stable then
+			if type == "table" then
+				lt[_] = setmetatable(obj, {__index = stable, __call = af["convert"]})
+				lt[_] = setmetatable(lt[_], metastable)
+			else
+				lt[_] = setmetatable({obj, luav = type}, {__index = stable, __call = af["convert"]})
+				lt[_] = setmetatable(lt[_], metastable)
+			end
+		end
+	end; return unpack(lt)
+end
+
 function af:duplicate(num, data) local lt = {}; for a=1,num do lt[#lt+1] = data end; return unpack(lt) end
 af["d"], af["dup"] = af:duplicate(2, af["duplicate"]); function af:convert(to, arg, _)
 	local funcs = { -- ["_____"] = function(data) if  then return end end,
@@ -122,6 +136,23 @@ af["get_time"] = function(cmd, svar)
 		rv = function(var) if var ~= 0 then return os.clock() - var end end
 	}; return funcs[cmd](svar)
 end; af["gt"], af["g_time"] = af:d(2, af["get_time"])
+
+local lt = luav.metadata["table"]
+	lt.__add = function(lt1, lt2) for i,v in lt2 do if typeof(i) == "number" then lt1[#lt1+1] = LuaV(v) else lt1[i] = LuaV(v) end end return lt1 end
+	lt.__sub = function(lt1, lt2) for i,_ in lt2 do lt1[i] = nil end; return lt1 end
+	lt.__mul = function(lt, num) local flt = LuaV({}); for a=1,num do flt = flt + lt end; return flt end
+	lt.__pow = function(lt, num) for a=1, num do lt = lt + lt end; return lt end
+	lt.__div = function(lt, obj) local num = 0; for _,v in lt do if obj == v then num = num + 1 end end; return num end
+	lt.__idiv = function(lt, obj) local num = 0; for i,_ in lt do if obj == i then num = num + 1 end end; return num end
+	lt.__mod = function(lt, obj) local num = 0; for i,v in lt do if obj == i or obj == v then num = num + 1 end end; return num end
+	lt.__eq = function(lt1, lt2) local t = true; for i,v in lt1 do if lt2[i] ~= v then t = false end end; return t end
+
+local lt = luav.metadata["string"]
+	lt.__add = function(str1, str2) str1 = str1[1]; return str1.." "..str2 end
+	lt.__sub = function(str1, str2) str1 = str1[1]; local fstr = str1:gsub(str2, ""); return fstr end
+	lt.__mul = function(str, num) str = str[1]; local fstr = ""; for a=1, num do fstr = fstr..str end; return fstr end
+	lt.__pow = function(str, num) str = str[1]; for a=1, num do str = str..str end; return str end
+	lt.__div = function(str1, str2) str1 = str1[1]; local _,num = str1:gsub(str2, ""); return num end
 
 -- function lt:____()  end
 	local lt = luav.data["Instance"]
@@ -219,12 +250,25 @@ end; af["gt"], af["g_time"] = af:d(2, af["get_time"])
 			lt["d"], lt["dblz"] = af:d(2, lt["destabilize"])
 
 	local lt = luav.data["table"]
-		function lt:insert(...) self = self[1]; for i,v in {...} do if typeof(i) == "number" then self[#self+1] = v else self[i] = v end end end
-		function lt:unpack() return unpack(self[1]) end
+		--♥gets♥
+			function lt:get_num_i_count() local num = 0; for i,_ in self do if type(i) == "number" then num = num + 1 end end; return num end 
 
+		function lt:insert(...) for i,v in {...} do if typeof(i) == "number" then self[#self+1] = v else self[i] = v end end end
+		function lt:unpack() return unpack(self) end
+		function lt:ultra_for()
+			local flt = {}
+			local inum = 1
+			for i,v in self do
+				print(i,v)
+				if type(v) == "table" then for _,v in af.ultra_for(v) do flt[inum] = v; inum = inum + 1 end
+				elseif type(i) == "number" then flt[inum] = v; inum = inum + 1
+				else flt[i] = v end
+			end; return flt
+		end
 		-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 			lt["i"], lt["ins"] = af:d(2, lt["insert"])
-			lt["_____"], lt["_____"] = af:d(2, lt["_____"])
+			-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
+			-- lt["uf"], lt["ult_fr"] = af:d(2, lt["ultra_for"])
 
 -- f["____"] = function()
 	f["tah"] = function() return LuaV(f.m.Target, f.m.Hit) end
