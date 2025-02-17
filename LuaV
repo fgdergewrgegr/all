@@ -81,13 +81,20 @@ function LuaV(...)
 		local type = typeof(obj)
 		local stable = luav.data[type]
 		local metastable = luav.metadata[type]
+		print(obj, type, stable, metastable)
+		for i,v in stable do print(i,v) end
 		if obj and stable then
+			-- print(true)
 			if type == "table" then
-				lt[_] = setmetatable(obj, {__index = stable, __call = af["convert"]})
-				lt[_] = setmetatable(lt[_], metastable)
+				local mlt = {__index = stable, __call = af["convert"]}
+				if metastable then for i,v in metastable do mlt[i] = v end end
+				lt[_] = setmetatable(obj, mlt)
+				-- print(type, lt[_], typeof(lt[_]))
 			else
-				lt[_] = setmetatable({obj, luav = type}, {__index = stable, __call = af["convert"]})
-				lt[_] = setmetatable(lt[_], metastable)
+				local mlt = {__index = function(ltt,arg) print("♥♥♥", ltt, arg); return stable[arg] or ltt[1][arg] end, __call = af["convert"]}
+				if metastable then for i,v in metastable do mlt[i] = v end end
+				lt[_] = setmetatable({obj}, mlt)
+				-- print(type, lt[_], typeof(lt[_]))
 			end
 		end
 	end; return unpack(lt)
@@ -108,7 +115,7 @@ af["d"], af["dup"] = af:duplicate(2, af["duplicate"]); function af:convert(to, a
 			elseif typeof(data) == "number" then return o.p[1]:GetPlayerByUserId(data) or o.p:ffcp("FollowUserId", data) or o.p:ffcp("AccountAge", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 			elseif typeof(data) == "string" then return o.p[1]:FindFirstChild(data) or o.p:ffcp("DisplayName", data) or (debugg and warn("cant find a player using: "..str(data)..": "..typeof(data)))
 			else return (debugg and warn(typeof(data).."is not supported for find a player")) end end,
-		["id"] = function(data) local plr = af:c(data, "p"); return plr and plr.UserId end,
+		["id"] = function(data) local plr = af:c(data, "plr"); return LuaV(function() return plr.UserId end):pa() end,
 		["string"] = function(data, arg) if typeof(data) == "table" then if not(arg) then arg = "" end; for _,str in data do if _ == 1 then data = str else data = data..arg..str end end; return data end end,
 		["readable_string"] = function(data) if typeof(data) == "table" then return "{"..f:c("s", data, ", ").."}" elseif typeof(data) == "Instance" then return typeof(data) end end,
 		["function"] = function(data) if typeof(data) == "string" then return loadstring(data) end end,
@@ -172,8 +179,8 @@ local lt = luav.metadata["string"]
 
 		-- ♥checks♥
 			function lt:check_hum() self = self[1]; if self and self.Health ~= 0 and self:GetState() ~= Enum.HumanoidStateType.Dead then return self end end
-			function lt:check_friend(id) if not(id) then id = luav.usid end; self = self:c("plr"); id = LuaV(id):c("id")
-			if self:ga("Friend") == nil then local t = self[1]:IsFriendsWith(id); self:sa("Friend", t); return t else return self:ga("Friend") end end
+			function lt:check_friend(id, arg) if not(id) then id = luav.usid end; self = self("plr"); id = LuaV(id)("id")
+			if self:GetAttribute("Friend") == nil then local t = LuaV(function() return self[1]:IsFriendsWith(id) end):pa(arg); self:SetAttribute("Friend", t); return t else return self:GetAttribute("Friend") end end
 			
 			-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 				lt["ch"], lt["c_hum"] = af:d(2, lt["check_hum"])
@@ -184,7 +191,7 @@ local lt = luav.metadata["string"]
 			function lt:get_descendants() return self[1]:GetDescendants() end
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = LuaV(p) end; return tree end end
-			function lt:get_char_child(...) local lt = {...}; for _,name in lt do local char = self:c("char"); if char then lt[_] = LuaV(self:ffc(char, LuaV(name):c("n"))) end end; return unpack(lt) end
+			function lt:get_char_child(...) local lt = {...}; for _,name in lt do local char = self("char"); if char then lt[_] = LuaV(self:ffc(char, LuaV(name):c("n"))) end end; return unpack(lt) end
 			function lt:get_limbs() return self:get_char_child("Right Arm", "Right Leg", "Left Arm", "Left Leg") end
 			function lt:get_my_char_child(...) local lt = {...}; for _,name in lt do name = LuaV(name); local char = f.char(); if char then lt[_] = char:ffc(name) or char:wfc(name) end end; return lt end
 
@@ -212,7 +219,8 @@ local lt = luav.metadata["string"]
 				lt["cins"], lt["c_ins"] = af:d(2, lt["create_ins"])
 
 	local lt = luav.data["function"]
-		function lt:pcall(arg) local s, e = pcall(af:c(self[1], "f")); return (s and e) or (arg and e) end
+		function lt:pcall() local s, e = pcall(af:c(self[1], "f")); return e end
+		function lt:pcall_arg(arg) local s, e = pcall(af:c(self[1], "f")); if s then return e else return arg end end
 		function lt:time(...) local time = os.clock(); local data = {self[1](...)}; return os.clock() - time, unpack(data) end
 		function lt:ptime(...) local data = {self:time(...)}; print(data[1]); data[1] = nil; return unpack(data) end
 		function lt:taskspawn(...) task.spawn(self[1], ...) end
@@ -220,6 +228,7 @@ local lt = luav.metadata["string"]
 
 		-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 			lt["p"], lt["pcl"] = af:d(2, lt["pcall"])
+			lt["pa"], lt["pcla"] = af:d(2, lt["pcall_arg"])
 			lt["t"], lt["tm"] = af:d(2, lt["time"])
 			lt["pt"], lt["ptm"] = af:d(2, lt["ptime"])
 			lt["ts"], lt["tspawn"] = af:d(2, lt["taskspawn"])
