@@ -81,14 +81,13 @@ function LuaV(...)
 		local type = typeof(obj)
 		local stable = luav.data[type]
 		local metastable = luav.metadata[type]
-		for i,v in stable do print(i,v) end
 		if obj and stable then
 			if type == "table" then
-				local mlt = {__index = stable, __call = af["convert"]}
+				local mlt = {__index = stable}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[_] = setmetatable(obj, mlt)
 			else
-				local mlt = {__index = function(ltt,arg) print("♥♥♥", ltt, arg); return stable[arg] or ltt[1][arg] end, __call = af["convert"]}
+				local mlt = {__index = function(ltt,arg) return stable[arg] or ltt[1][arg] end, __call = af["convert"]}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[_] = setmetatable({obj}, mlt)
 			end
@@ -163,10 +162,12 @@ local lt = luav.metadata["string"]
 			function lt:ffc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstChild(af:c(name, "n")) end return LuaV(unpack(lt)) end
 			function lt:ffct(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
 
-			function lt:ffd(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstDescendant(af:c(name, "n")) end return LuaV(unpack(lt)) end
-
 			function lt:wfc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:WaitForChild(af:c(name, "n")) end return LuaV(unpack(lt)) end
 			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
+
+			function lt:fwc(...) local lt = {...}; for i,name in lt do name = LuaV(name)("n"); lt[i] = self:ffc(name) or self:wfc(name) end; return unpack(lt) end
+
+			function lt:ffd(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstDescendant(af:c(name, "n")) end return LuaV(unpack(lt)) end
 
 			function lt:ffcp(prop, ...) local lt = {...}; for _,obj in pairs(self:gc()) do local data = LuaV(function() if #lt ~= 0 then for _,v in lt do if obj[prop] == v then return obj end end else return obj end end):p(); if data then return LuaV(data) end end end
 			function lt:ffdp(prop, ...) local lt = {...}; for _,obj in pairs(self:gd()) do local data = LuaV(function() if #lt ~= 0 then for _,v in lt do if obj[prop] == v then return obj end end else return obj end end):p(); if data then return LuaV(data) end end end
@@ -187,18 +188,12 @@ local lt = luav.metadata["string"]
 			function lt:get_descendants() return self[1]:GetDescendants() end
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = LuaV(p) end; return tree end end
-			function lt:get_char_child(...) local lt = {...}; for _,name in lt do local char = self("char"); if char then lt[_] = LuaV(self:ffc(char, LuaV(name):c("n"))) end end; return unpack(lt) end
-			function lt:get_limbs() return self:get_char_child("Right Arm", "Right Leg", "Left Arm", "Left Leg") end
-			function lt:get_my_char_child(...) local lt = {...}; for _,name in lt do name = LuaV(name); local char = f.char(); if char then lt[_] = char:ffc(name) or char:wfc(name) end end; return lt end
 
 			-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 				lt["gc"], lt["g_children"] = af:d(2, lt["get_children"])
 				lt["gd"], lt["g_descendants"] = af:d(2, lt["get_descendants"])
 				lt["ga"], lt["g_attribute"] = af:d(2, lt["get_attribute"])
 				lt["gp"], lt["g_parents"] = af:d(2, lt["get_parents"])
-				lt["gcc"], lt["g_char_child"] = af:d(2, lt["get_char_child"])
-				lt["gl"], lt["g_limbs"] = af:d(2, lt["get_limbs"])
-				lt["gmcc"], lt["g_my_char_child"] = af:d(2, lt["get_my_char_child"])
 
 		--♥sets♥
 			function lt:set_attribute(name, value) self[1]:SetAttribute(af:c(name, "s"), value); return LuaV(value) end
@@ -260,16 +255,9 @@ local lt = luav.metadata["string"]
 
 		function lt:insert(...) for i,v in {...} do if typeof(i) == "number" then self[#self+1] = v else self[i] = v end end end
 		function lt:unpack() return unpack(self) end
-		function lt:ultra_for()
-			local flt = {}
-			local inum = 1
-			for i,v in self do
-				print(i,v)
-				if type(v) == "table" then for _,v in af.ultra_for(v) do flt[inum] = v; inum = inum + 1 end
-				elseif type(i) == "number" then flt[inum] = v; inum = inum + 1
-				else flt[i] = v end
-			end; return flt
-		end
+		function lt:ultra_for() local flt = {}; local inum = 1 for i,v in self do if type(v) == "table" then for _,v in LuaV(v):ultra_for() do flt[inum] = v; inum = inum + 1 end
+		elseif type(i) == "number" then flt[inum] = v; inum = inum + 1 else flt[i] = v end end; return flt end
+
 		-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 			lt["i"], lt["ins"] = af:d(2, lt["insert"])
 			-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
@@ -286,7 +274,14 @@ local lt = luav.metadata["string"]
 	f["vhsiy"] = function() return LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):run("VHS IY") end
 	f["update"] = function() print("Updating..."); local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return write("f/f.lua", data) end
 
+	f["char"] = function() return o.me.Character or (o.me.CharacterAdded:Wait() and o.me.Character) end
 
+	f["hrp"] = function() return xdl:gmcc("HumanoidRootPart") end
+	f["hum"] = function() return xdl:gmcc("Humanoid") end
+	f["hd"] = function() return xdl:gmcc("Head") end
+
+	f["limbs"] = function() return xdl:gmcc("Right Arm"), xdl:gmcc("Right Leg"), xdl:gmcc("Left Arm"), xdl:gmcc("Left Leg") end
+	f["all"] = function() return f.hrp(), f.hum(), f.hd() end
 
 for _,lt in luav.data do
 	for _, name in {"convert", "con", "c", "duplicate", "dup", "d"} do
@@ -305,3 +300,5 @@ print([[
 ███████╗╚██████╔╝██║░░██║░░╚██╔╝░░
 ╚══════╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░
 ]])
+
+print(unpack(LuaV({11,22,{33,44}}):ultra_for()))
