@@ -81,20 +81,16 @@ function LuaV(...)
 		local type = typeof(obj)
 		local stable = luav.data[type]
 		local metastable = luav.metadata[type]
-		print(obj, type, stable, metastable)
 		for i,v in stable do print(i,v) end
 		if obj and stable then
-			-- print(true)
 			if type == "table" then
 				local mlt = {__index = stable, __call = af["convert"]}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[_] = setmetatable(obj, mlt)
-				-- print(type, lt[_], typeof(lt[_]))
 			else
 				local mlt = {__index = function(ltt,arg) print("♥♥♥", ltt, arg); return stable[arg] or ltt[1][arg] end, __call = af["convert"]}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[_] = setmetatable({obj}, mlt)
-				-- print(type, lt[_], typeof(lt[_]))
 			end
 		end
 	end; return unpack(lt)
@@ -281,7 +277,7 @@ local lt = luav.metadata["string"]
 
 -- f["____"] = function()
 	f["tah"] = function() return LuaV(f.m.Target, f.m.Hit) end
-	f["plrs"] = function() return LuaV(ipairs(o.p[1]:GetPlayers())) end
+	f["plrs"] = function() return {LuaV(unpack(ipairs(o.p[1]:GetPlayers())))} end
 	f["muid"] = function() return LuaV(f.me.UserId) end
 	f["cam"] = function() return LuaV(f.w.CurrentCamera) end
 	f["grt"] = function() return LuaV(f.p.RespawnTime) end
@@ -289,6 +285,8 @@ local lt = luav.metadata["string"]
 	f["dex"] = function() return LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):run("DEX") end
 	f["vhsiy"] = function() return LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):run("VHS IY") end
 	f["update"] = function() print("Updating..."); local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return write("f/f.lua", data) end
+
+
 
 for _,lt in luav.data do
 	for _, name in {"convert", "con", "c", "duplicate", "dup", "d"} do
