@@ -1,13 +1,17 @@
 
+
 --[[
 
-local path, luav = "LuaV/LuaV.lua"
-if isfile(path) then luav = dofile(path)()
-else local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(function() writefile(path, data) end)
-luav = loadstring(data)() end; path = nil
+
+local path, luav = "LuaV/LuaV.lua", _G.luav if not(luav) then
+if isfile(path) then luav = dofile(path)() else
+local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
+task.defer(function() writefile(path, data) end); luav = loadstring(data)() end
+local l = luav.tg.corefuncs.LuaV; for _,lt in luav.tg do l(lt):tg() end; path, l = nil, nil
+
 
 ]]
+
 
 luav = {
 	data = {
@@ -24,15 +28,16 @@ luav = {
 		-- ["Vector3"] = {},
 		-- ["number"] = {},
 		["function"] = {}
-	}, funcs = {},
-	addfuncs = {},
-	objs = {},
-	iadds = {}
+	}, tg = {
+		corefuncs = {},
+		addfuncs = {},
+		objs = {}
+	}, iadds = {}
 }
 
-local f = luav.funcs
-local af = luav.addfuncs
-local o = luav.objs
+local f = luav.tg.addfuncs
+local af = luav.tg.corefuncs
+local o = luav.tg.objs
 local a = luav.iadds
 
 local timefunc, timefunc1 = os.clock(), os.clock()
@@ -75,13 +80,13 @@ local int = tonumber
 	o["nv3"] = Vector3.new()
 
 local olr_typeof = typeof
-typeof = function(obj)
+function af.typeof(obj)
 	local type = olr_typeof(obj)
 	if type == "table" then return obj["luav"] or type
 	else return type end
-end
+end; typeof = af.typeof
 
-function LuaV(...)
+function af.LuaV(...)
 	local lt = {...}
 	for i,obj in lt do
 		local type = typeof(obj)
@@ -103,16 +108,16 @@ function LuaV(...)
 			end
 		end
 	end; return unpack(lt)
-end
+end; LuaV = af.LuaV
 
-function unLuaV(...)
+function af.unLuaV(...)
 	local lt = {...}
 	for i,obj in lt do
 		if typeof(obj) == "table" and obj["luav"] then
 			lt[i] = obj[1]
 		end
 	end; return unpack(lt)
-end
+end; unLuaV = af.unLuaV
 
 function af:duplicate(num, data) local lt = {}; for a=1,num do lt[#lt+1] = data end; return unpack(lt) end
 af["d"], af["dup"] = af:duplicate(2, af["duplicate"]); function af:convert(to, arg, _)
@@ -285,6 +290,7 @@ local lt = luav.metadata["string"]
 		function lt:ultra_unpack() return unpack(self:uf()) end
 		function lt:print() print(unLuaV(self:u())) end
 		function lt:readable_print() local fstr = "{"; for i,v in {unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
+		function lt:to_global() for name,_ in self do loadstring(name.." = self[name]")() end
 
 		-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 			lt["fi"], lt["fndi"] = af:d(2, lt["find_i"])
@@ -295,6 +301,7 @@ local lt = luav.metadata["string"]
 			lt["uu"], lt["uunp"] = af:d(2, lt["ultra_unpack"])
 			lt["p"], lt["prn"] = af:d(2, lt["print"])
 			lt["rp"], lt["rprn"] = af:d(2, lt["readable_print"])
+			lt["tg"], lt["toglb"] = af:d(2, lt["to_global"])
 
 -- f["____"] = function()
 	f["tah"] = function() return LuaV(f.m.Target, f.m.Hit) end
@@ -302,19 +309,9 @@ local lt = luav.metadata["string"]
 	f["muid"] = function() return LuaV(f.me.UserId) end
 	f["cam"] = function() return LuaV(f.w.CurrentCamera) end
 	f["grt"] = function() return LuaV(f.p.RespawnTime) end
-	f["iy"] = function() return LuaV("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):run("IY") end
-	f["dex"] = function() return LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):run("DEX") end
-	f["vhsiy"] = function() return LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):run("VHS IY") end
-	f["update"] = function() print("Updating..."); local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/XD%20Lib"); print(data); return write("f/f.lua", data) end
-
-	f["char"] = function() return o.me.Character or (o.me.CharacterAdded:Wait() and o.me.Character) end
-
-	f["hrp"] = function() return xdl:gmcc("HumanoidRootPart") end
-	f["hum"] = function() return xdl:gmcc("Humanoid") end
-	f["hd"] = function() return xdl:gmcc("Head") end
-
-	f["limbs"] = function() return xdl:gmcc("Right Arm"), xdl:gmcc("Right Leg"), xdl:gmcc("Left Arm"), xdl:gmcc("Left Leg") end
-	f["all"] = function() return f.hrp(), f.hum(), f.hd() end
+	f["iy"] = function() return LuaV("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):fastload("IY") end
+	f["dex"] = function() return LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):fastload("DEX") end
+	f["vhsiy"] = function() return LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):fastload("VHS IY") end
 
 for _,lt in luav.data do
 	for _, name in {"convert", "con", "c", "duplicate", "dup", "d"} do
