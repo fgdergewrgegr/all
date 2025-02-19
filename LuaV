@@ -321,7 +321,7 @@ end
 for _,obj in o do o[_] = LuaV(obj) end
 for _,obj in f do f[_] = LuaV(obj) end
 
-for _,lt in luav.coredata do for name, data do getgenv()[name] = data end end
+for _,lt in luav.coredata do for name, data in lt do getgenv()[name] = data end end
 
 print[[
 	
