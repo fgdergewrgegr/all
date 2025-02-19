@@ -27,17 +27,16 @@ luav = {
 		-- ["Vector3"] = {},
 		-- ["number"] = {},
 		["function"] = {}
-	}, tg = {
-		coredata = {},
+	}, coredata = {
+		funcs = {},
 		addfuncs = {},
 		objs = {}
-	}, iadds = {},
-	tgflt = {}
+	}, iadds = {}
 }
 
-local f = luav.tg.addfuncs
-local af = luav.tg.coredata
-local o = luav.tg.objs
+local f = luav.coredata.addfuncs
+local af = luav.coredata.funcs
+local o = luav.coredata.objs
 local a = luav.iadds
 
 local timefunc, timefunc1 = os.clock(), os.clock()
