@@ -6,8 +6,7 @@
 local path, luav = "LuaV/LuaV.lua", _G.luav if not(luav) then
 if isfile(path) then luav = dofile(path)(); _G.luav = luav else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(writefile, path, data); luav = loadstring(data)(); _G.luav = luav end
-local l = luav.tg.corefuncs.LuaV; for _,lt in luav.tg do l(lt):tg() end; path, l = nil, nil end
+task.defer(writefile, path, data); luav = loadstring(data)(); _G.luav = luav end end; path = nil
 
 
 ]]
@@ -29,7 +28,7 @@ luav = {
 		-- ["number"] = {},
 		["function"] = {}
 	}, tg = {
-		corefuncs = {},
+		coredata = {},
 		addfuncs = {},
 		objs = {}
 	}, iadds = {},
@@ -37,7 +36,7 @@ luav = {
 }
 
 local f = luav.tg.addfuncs
-local af = luav.tg.corefuncs
+local af = luav.tg.coredata
 local o = luav.tg.objs
 local a = luav.iadds
 
@@ -321,6 +320,8 @@ for _,lt in luav.data do
 end
 for _,obj in o do o[_] = LuaV(obj) end
 for _,obj in f do f[_] = LuaV(obj) end
+
+for _,lt in luav.coredata do for name, data do getgenv()[name] = data end end
 
 print[[
 	
