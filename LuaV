@@ -6,7 +6,7 @@
 local path, luav = "LuaV/LuaV.lua", _G.luav if not(luav) then
 if isfile(path) then luav = dofile(path)(); _G.luav = luav else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(function() writefile(path, data) end); luav = loadstring(data)(); _G.luav = luav end
+task.defer(writefile, path, data); luav = loadstring(data)(); _G.luav = luav end
 local l = luav.tg.corefuncs.LuaV; for _,lt in luav.tg do l(lt):tg() end; path, l = nil, nil
 
 
