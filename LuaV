@@ -7,7 +7,7 @@ local path, luav = "LuaV/LuaV.lua", _G.luav if not(luav) then
 if isfile(path) then luav = dofile(path)(); _G.luav = luav else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
 task.defer(writefile, path, data); luav = loadstring(data)(); _G.luav = luav end
-local l = luav.tg.corefuncs.LuaV; for _,lt in luav.tg do l(lt):tg() end; path, l = nil, nil
+local l = luav.tg.corefuncs.LuaV; for _,lt in luav.tg do l(lt):tg() end; path, l = nil, nil end
 
 
 ]]
@@ -290,7 +290,7 @@ local lt = luav.metadata["string"]
 		function lt:ultra_unpack() return unpack(self:uf()) end
 		function lt:print() print(unLuaV(self:u())) end
 		function lt:readable_print() local fstr = "{"; for i,v in {unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
-		function lt:to_global() for name,_ in self do loadstring(name.." = self[name]")() end
+		function lt:to_global() for name,_ in self do loadstring(name.." = self[name]")() end end
 
 		-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 			lt["fi"], lt["fndi"] = af:d(2, lt["find_i"])
