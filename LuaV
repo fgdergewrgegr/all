@@ -32,7 +32,8 @@ luav = {
 		corefuncs = {},
 		addfuncs = {},
 		objs = {}
-	}, iadds = {}
+	}, iadds = {},
+	tgflt = {}
 }
 
 local f = luav.tg.addfuncs
@@ -290,7 +291,7 @@ local lt = luav.metadata["string"]
 		function lt:ultra_unpack() return unpack(self:uf()) end
 		function lt:print() print(unLuaV(self:u())) end
 		function lt:readable_print() local fstr = "{"; for i,v in {unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
-		function lt:to_global() for name,_ in self do loadstring(name.." = self[name]")() end end
+		function lt:to_global() local num = #luav.tgflt + 1; for name,func in self do luav.tgflt[num] = func; loadstring(name.." = luav.tgflt["..num.."]")() end; luav.tgflt[num] = nil end
 
 		-- lt["_____"], lt["_____"] = af:d(2, lt["_____"])
 			lt["fi"], lt["fndi"] = af:d(2, lt["find_i"])
