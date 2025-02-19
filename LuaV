@@ -3,10 +3,10 @@
 --[[
 
 
-local path, luav = "LuaV/LuaV.lua", _G.luav if not(luav) then
-if isfile(path) then luav = dofile(path)(); _G.luav = luav else
+local path, luav = "LuaV/LuaV.lua", getgenv().luav if not(luav) then
+if isfile(path) then luav = dofile(path)(); getgenv().luav = luav else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(writefile, path, data); luav = loadstring(data)(); _G.luav = luav end end; path = nil
+task.defer(writefile, path, data); luav = loadstring(data)(); getgenv().luav = luav end end; path = nil
 
 
 ]]
