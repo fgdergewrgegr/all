@@ -79,6 +79,7 @@ getgenv().int = tonumber
 	o["dname"] = o.me.DisplayName
 	o["pg"] = o.me.PlayerGui
 	o["muid"] = o.me.UserId
+	o["rt"] = o.p.RespawnTime
 
 -- o["_____"] = 
 	o["mhv3"] = Vector3.new("inf", "inf", "inf")
@@ -219,26 +220,28 @@ local lt = luav.metadata["string"]
 			if self:ga("Friend") == nil then local t = cf.LuaV(function() return self[1]:IsFriendsWith(id[1]) end):pa(arg); self:sa("Friend", t); return t else return self:ga("Friend") end end
 			
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
-				lt["ch"], lt["c_hum"] = cf.d(2, lt["check_hum"])
-				lt["cf"], lt["c_friend"] = cf.d(2, lt["check_friend"])
+				lt["ch"], lt["chum"] = cf.d(2, lt["check_hum"])
+				lt["cf"], lt["cfriend"] = cf.d(2, lt["check_friend"])
 
 		--♥gets♥
 			function lt:get_children() return self[1]:GetChildren() end
 			function lt:get_descendants() return self[1]:GetDescendants() end
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = cf.LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = cf.LuaV(p) end; return tree end end
+			function lt:get_char() self = self:c("p"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
-				lt["gc"], lt["g_children"] = cf.d(2, lt["get_children"])
-				lt["gd"], lt["g_descendants"] = cf.d(2, lt["get_descendants"])
-				lt["ga"], lt["g_attribute"] = cf.d(2, lt["get_attribute"])
-				lt["gp"], lt["g_parents"] = cf.d(2, lt["get_parents"])
+				lt["gc"], lt["gchildren"] = cf.d(2, lt["get_children"])
+				lt["gd"], lt["gdescendants"] = cf.d(2, lt["get_descendants"])
+				lt["ga"], lt["gattribute"] = cf.d(2, lt["get_attribute"])
+				lt["gp"], lt["gparents"] = cf.d(2, lt["get_parents"])
+				lt["gcr"], lt["gchar"] = cf.d(2, lt["get_char"])
 
 		--♥sets♥
 			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s"), value); return cf.LuaV(value) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
-				lt["sa"], lt["s_attribute"] = cf.d(2, lt["set_attribute"])
+				lt["sa"], lt["sattribute"] = cf.d(2, lt["set_attribute"])
 		
 		--♥others♥
 			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = val end; return cf.LuaV(obj) end
@@ -246,7 +249,7 @@ local lt = luav.metadata["string"]
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
-				lt["cins"], lt["c_ins"] = cf.d(2, lt["create_ins"])
+				lt["cins"], lt["cins"] = cf.d(2, lt["create_ins"])
 
 	local lt = luav.data["function"]
 		function lt:pcall() local s, e = pcall(self[1]); return e end
@@ -312,12 +315,17 @@ local lt = luav.metadata["string"]
 			lt["rp"], lt["rprn"] = cf.d(2, lt["readable_print"])
 			lt["tg"], lt["toglb"] = cf.d(2, lt["to_global"])
 
--- f["____"] = function()
-	f["tah"] = function() return cf.LuaV(f.m.Target, f.m.Hit) end
+-- f["____"] = function() return LuaV() end
+	f["gchar"] = function() return cf.LuaV(o.me.Character or (o.me.CharacterAdded:Wait() and o.me.Character)) end
+	f["gcam"] = function() return cf.LuaV(o.w.CurrentCamera) end
+	f["gname"] = function() return cf.LuaV(o.me.Name) end
+	f["gdname"] = function() return cf.LuaV(o.me.DisplayName) end
+	f["gpg"] = function() return cf.LuaV(o.me.PlayerGui) end
+	f["gmuid"] = function() return cf.LuaV(o.me.UserId) end
+	f["grt"] = function() return cf.LuaV(o.p.RespawnTime) end
+
+	f["tah"] = function() return cf.LuaV(o.m.Target, o.m.Hit) end
 	f["plrs"] = function() return {cf.LuaV(unpack(ipairs(o.p[1]:GetPlayers())))} end
-	f["muid"] = function() return cf.LuaV(f.me.UserId) end
-	f["cam"] = function() return cf.LuaV(f.w.CurrentCamera) end
-	f["grt"] = function() return cf.LuaV(f.p.RespawnTime) end
 	f["iy"] = function() return cf.LuaV("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):fastload("IY") end
 	f["dex"] = function() return cf.LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):fastload("DEX") end
 	f["vhsiy"] = function() return cf.LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):fastload("VHS IY") end
