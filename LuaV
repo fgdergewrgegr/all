@@ -95,7 +95,6 @@ function cf.LuaV(...)
 	local lt = {...}
 	for i,obj in lt do
 		local type = cf.olr_typeof(obj)
-		print(obj, type)
 		local stable = luav.data[type]
 		local metastable = luav.metadata[type]
 		if obj and stable then
@@ -107,7 +106,7 @@ function cf.LuaV(...)
 				local mlt = {__index = stable, __call = function(s, ...) return s[1](...) end}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
-			else
+			elseif type ~= "table" then
 				local mlt = {__index = function(ltt,arg) return stable[arg] or ltt[1][arg] end}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
@@ -136,7 +135,7 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 		for _,plr in f.plrs() do local char = plr.Character; if char and (data[1]):IsDescendantOf(char) then return char end end end
 		return (debugg and warn("cant find a character using: "..str(data[1])..": "..typeof(data))) else
 		return c(data, "plr").Character or (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) end end
-	cnf["player"] = function(data) print(data, data[1])
+	cnf["player"] = function(data)
 		if typeof(data) == "Instance" and not((data[1]):IsA("Player")) then return (o.p[1]):GetPlayerFromCharacter(data) or o.p:ffc(data.Name) or (o.p[1]):GetPlayerFromCharacter(cf.c(data, "char")) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
 		elseif typeof(data) == "number" then return (o.p[1]):GetPlayerByUserId(data) or o.p:ffcp("FollowUserId", data) or o.p:ffcp("AccountAge", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
 		elseif typeof(data) == "string" then return (o.p[1]):FindFirstChild(data[1]) or o.p:ffcp("DisplayName", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
@@ -159,7 +158,7 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 	cnf["n"], cnf["nm"] = cf.d(2, cnf["name"])
 
 
-function cf.convert(data, to, arg) return cf.LuaV(cnf[to:lower()](cf.LuaV(data), arg)) or data end
+function cf.convert(data, to, arg) return cf.LuaV(cnf[cf.unLuaV(to):lower()](cf.LuaV(data), arg)) or data end
 cf["c"], cf["con"] = cf.d(2, cf["convert"])
 
 -- tmf["____"] = function() end
@@ -216,7 +215,7 @@ local lt = luav.metadata["string"]
 
 		-- ♥checks♥
 			function lt:check_hum() self = self[1]; if self and self.Health ~= 0 and self:GetState() ~= Enum.HumanoidStateType.Dead then return self end end
-			function lt:check_friend(id, arg) if not(id) then id = o.muid end; self = self:c("plr"); id = cf.c(id, "id")
+			function lt:check_friend(id, arg) if not(id) then id = o.muid end; self = self:c("p"); id = cf.c(id, "i")
 			if self:ga("Friend") == nil then local t = cf.LuaV(function() return self[1]:IsFriendsWith(id[1]) end):pa(arg); self:sa("Friend", t); return t else return self:ga("Friend") end end
 			
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
