@@ -244,14 +244,17 @@ local lt = luav.metadata["string"]
 				lt["sa"], lt["sattribute"] = cf.d(2, lt["set_attribute"])
 		
 		--♥others♥
+			function lt:property_changed(prop, func) self[1]:GetPropertyChangedSignal(cf.unLuaV(cf.c(prop, "s"))):Connect(func) end
 			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = val end; return cf.LuaV(obj) end
 			function lt:create_ins(class, data, config) local format = a[class] or {}; class, data = format[1] or class, format[2] or data; local obj = self:ffc(data.Name)
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
-				lt["cins"], lt["cins"] = cf.d(2, lt["create_ins"])
+				lt["pc"], lt["pchanged"] = cf.d(2, lt["property_changed"])
+				lt["ci"], lt["cins"] = cf.d(2, lt["create_ins"])
 
 	local lt = luav.data["function"]
+		function lt:property_changed(obj, prop) cf.unLuaV(obj):GetPropertyChangedSignal(cf.unLuaV(cf.c(prop, "s"))):Connect(self[1]) end
 		function lt:pcall() local s, e = pcall(self[1]); return e end
 		function lt:pcall_arg(arg) local s, e = pcall(self[1]); if s then return e else return arg end end
 		function lt:time(...) local time = tick(); local data = {self(...)}; return tick() - time, unpack(data) end
@@ -260,6 +263,7 @@ local lt = luav.metadata["string"]
 		function lt:taskdefer(...) task.defer(self[1], ...) end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
+			lt["pc"], lt["pchanged"] = cf.d(2, lt["property_changed"])
 			lt["p"], lt["pcl"] = cf.d(2, lt["pcall"])
 			lt["pa"], lt["pcla"] = cf.d(2, lt["pcall_arg"])
 			lt["t"], lt["tm"] = cf.d(2, lt["time"])
@@ -272,7 +276,7 @@ local lt = luav.metadata["string"]
 		function lt:json_read_write(name) if name then write("LuaV/saves/"..name..".txt", o.hs[1]:JSONEncode(self[1])) else return read("LuaV/saves/"..self[1]..".txt") end end
 		function lt:save_run(name) if name then write("LuaV/saves/"..name..".func", self[1]) else return read("LuaV/saves/"..self[1]..".func") end end
 		function lt:fastload(name) local fname = name or self[1]; local path = "LuaV/fastload/"..fname.."/"..fname; if name then
-		self = self[1]; if isf(path..".lua") then cf.LuaV(write):td(path..".link", self); cf.LuaV(write):td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
+		self = self[1]; if is(path..".lua") then cf.LuaV(write):td(path..".link", self); cf.LuaV(write):td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
 		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return loadstring(data) end
 		else cf.LuaV(write):td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
 		function lt:run(...) return loadstring(self[1])(...) end
@@ -315,8 +319,15 @@ local lt = luav.metadata["string"]
 			lt["rp"], lt["rprn"] = cf.d(2, lt["readable_print"])
 			lt["tg"], lt["toglb"] = cf.d(2, lt["to_global"])
 
--- f["____"] = function() return LuaV() end
+-- f["____"] = function() return cf.LuaV() end
 	f["gchar"] = function() return cf.LuaV(o.me.Character or (o.me.CharacterAdded:Wait() and o.me.Character)) end
+
+	f["hrp"] = function() return f.gchar():fwc("HumanoidRootPart") end
+	f["hum"] = function() return f.gchar():fwc("Humanoid") end
+	f["hd"] = function() return f.gchar():fwc("Head") end
+
+	f["hhh"] = function() return f.hrp(), f.hum(), f.hd() end
+
 	f["gcam"] = function() return cf.LuaV(o.w.CurrentCamera) end
 	f["gname"] = function() return cf.LuaV(o.me.Name) end
 	f["gdname"] = function() return cf.LuaV(o.me.DisplayName) end
