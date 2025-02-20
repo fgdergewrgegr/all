@@ -205,7 +205,7 @@ local lt = luav.metadata["string"]
 			function lt:wfc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:WaitForChild(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
 			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
 
-			function lt:fwc(...) local lt = {...}; for i,name in lt do name = cf.LuaV(name)("n"); lt[i] = self:ffc(name) or self:wfc(name) end; return unpack(lt) end
+			function lt:fwc(...) local lt = {...}; for i,name in lt do lt[i] = self:ffc(name) or self:wfc(name) end; return unpack(lt) end
 
 			function lt:ffd(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstDescendant(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
 
