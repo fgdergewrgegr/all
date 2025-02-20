@@ -275,10 +275,26 @@ local lt = luav.metadata["string"]
 		function lt:read_write(name) if name then write("LuaV/saves/"..name..".txt", self[1]) else return read("LuaV/saves/"..self[1]..".txt") end end
 		function lt:json_read_write(name) if name then write("LuaV/saves/"..name..".txt", o.hs[1]:JSONEncode(self[1])) else return read("LuaV/saves/"..self[1]..".txt") end end
 		function lt:save_run(name) if name then write("LuaV/saves/"..name..".func", self[1]) else return read("LuaV/saves/"..self[1]..".func") end end
-		function lt:fastload(name) local fname = name or self[1]; local path = "LuaV/fastload/"..fname.."/"..fname; if name then
-		self = self[1]; if is(path..".lua") then cf.LuaV(write):td(path..".link", self); cf.LuaV(write):td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
-		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return loadstring(data) end
-		else cf.LuaV(write):td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
+		function lt:fastload(name)
+			local fname = name or self[1]
+			local path = "LuaV/fastload/"..fname.."/"..fname
+			if name then
+				self = self[1]
+				if is(path..".lua") then
+					cf.LuaV(write):td(path..".link", self)
+					cf.LuaV(write):td(path..".lua", game:HttpGet(self))
+					return dof(path..".lua")
+				else
+					write(path..".link", self)
+					local data = game:HttpGet(self)
+					write(path..".lua", data)
+					return loadstring(data)
+				end
+			else
+				cf.LuaV(write):td(path..".lua", game:HttpGet(read(path..".link")))
+				return dof(path..".lua")
+			end
+		end
 		function lt:run(...) return loadstring(self[1])(...) end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
@@ -354,4 +370,7 @@ print[[
 ██║░░░░░██║░░░██║██╔══██║░╚████╔╝░
 ███████╗╚██████╔╝██║░░██║░░╚██╔╝░░
 ╚══════╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░
-]]; return luav
+]]; 
+-- return luav
+
+LuaV("https://sirius.menu/rayfield"):fastload("Rayfield")
