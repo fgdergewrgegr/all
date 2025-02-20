@@ -94,7 +94,8 @@ end
 function cf.LuaV(...)
 	local lt = {...}
 	for i,obj in lt do
-		local type = typeof(obj)
+		local type = cf.olr_typeof(obj)
+		print(obj, type)
 		local stable = luav.data[type]
 		local metastable = luav.metadata[type]
 		if obj and stable then
@@ -107,7 +108,7 @@ function cf.LuaV(...)
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
 			else
-				local mlt = {__index = function(ltt,arg) return stable[arg] or ltt[1][arg] end, __call = cf["convert"]}
+				local mlt = {__index = function(ltt,arg) return stable[arg] or ltt[1][arg] end}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
 			end
@@ -131,14 +132,14 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 	cnf["vector3"] = function(data) if typeof(data) == "Instance" then return data.Position end end
 	cnf["cframe"] = function(data) if typeof(data) == "Instance" then return data.CFrame end end
 	cnf["character"] = function(data)
-		if typeof(data) == "Instance" then local char = o.p[1]:GetPlayerFromCharacter(data); if char then return char else
-		for _,plr in f.plrs() do local char = plr.Character; if char and data[1]:IsDescendantOf(char) then return char end end end
+		if typeof(data) == "Instance" then local char = (o.p[1]):GetPlayerFromCharacter(data); if char then return char else
+		for _,plr in f.plrs() do local char = plr.Character; if char and (data[1]):IsDescendantOf(char) then return char end end end
 		return (debugg and warn("cant find a character using: "..str(data[1])..": "..typeof(data))) else
 		return c(data, "plr").Character or (debugg and warn("cant find a character using: "..str(data)..": "..typeof(data))) end end
-	cnf["player"] = function(data)
-		if typeof(data) == "Instance" and not(data[1]:IsA("Player")) then return o.p[1]:GetPlayerFromCharacter(data) or o.p:ffc(data.Name) or o.p[1]:GetPlayerFromCharacter(cf.c(data, "char")) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
-		elseif typeof(data) == "number" then return o.p[1]:GetPlayerByUserId(data) or o.p:ffcp("FollowUserId", data) or o.p:ffcp("AccountAge", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
-		elseif typeof(data) == "string" then return o.p[1]:FindFirstChild(data[1]) or o.p:ffcp("DisplayName", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
+	cnf["player"] = function(data) print(data, data[1])
+		if typeof(data) == "Instance" and not((data[1]):IsA("Player")) then return (o.p[1]):GetPlayerFromCharacter(data) or o.p:ffc(data.Name) or (o.p[1]):GetPlayerFromCharacter(cf.c(data, "char")) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
+		elseif typeof(data) == "number" then return (o.p[1]):GetPlayerByUserId(data) or o.p:ffcp("FollowUserId", data) or o.p:ffcp("AccountAge", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
+		elseif typeof(data) == "string" then return (o.p[1]):FindFirstChild(data[1]) or o.p:ffcp("DisplayName", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
 		else return (debugg and warn(typeof(data).."is not supported for find a player")) end end
 	cnf["userid"] = function(data) local plr = cf.c(data, "plr"); if data ~= plr then return plr.UserId end end
 	cnf["string"] = function(data, arg) if typeof(data) == "table" then if not(arg) then arg = "" end; for _,str in data do if _ == 1 then data = str else data = data..arg..str end end; return data end end
@@ -215,7 +216,7 @@ local lt = luav.metadata["string"]
 
 		-- ♥checks♥
 			function lt:check_hum() self = self[1]; if self and self.Health ~= 0 and self:GetState() ~= Enum.HumanoidStateType.Dead then return self end end
-			function lt:check_friend(id, arg) if not(id) then id = o.muid end; self = self("plr"); id = cf.c(id, "id")
+			function lt:check_friend(id, arg) if not(id) then id = o.muid end; self = self:c("plr"); id = cf.c(id, "id")
 			if self:ga("Friend") == nil then local t = cf.LuaV(function() return self[1]:IsFriendsWith(id[1]) end):pa(arg); self:sa("Friend", t); return t else return self:ga("Friend") end end
 			
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
