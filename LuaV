@@ -205,7 +205,7 @@ local lt = luav.metadata["string"]
 			function lt:wfc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:WaitForChild(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
 			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
 
-			function lt:fwc(...) local lt = {...}; for i,name in lt do lt[i] = self:ffc(name) or self:wfc(name) end; return unpack(lt) end
+			function lt:fwc(...) local lt = {...}; for i,name in lt do name = cf.LuaV(name)("n"); lt[i] = self:ffc(name) or self:wfc(name) end; return unpack(lt) end
 
 			function lt:ffd(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstDescendant(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
 
@@ -337,9 +337,9 @@ local lt = luav.metadata["string"]
 
 	f["tah"] = function() return cf.LuaV(o.m.Target, o.m.Hit) end
 	f["plrs"] = function() return {cf.LuaV(unpack(ipairs(o.p[1]:GetPlayers())))} end
-	f["iy"] = function() return cf.LuaV("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):fastload("IY")() end
-	f["dex"] = function() return cf.LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):fastload("DEX")() end
-	f["vhsiy"] = function() return cf.LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):fastload("VHS IY")() end
+	f["iy"] = function() return cf.LuaV("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):fastload("IY") end
+	f["dex"] = function() return cf.LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):fastload("DEX") end
+	f["vhsiy"] = function() return cf.LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):fastload("VHS IY") end
 
 for fname,func in cf do for ltname,_ in luav.data do luav.data[ltname][fname] = func end end
 for name,obj in o do o[name] = cf.LuaV(o[name]) end
@@ -354,7 +354,4 @@ print[[
 ██║░░░░░██║░░░██║██╔══██║░╚████╔╝░
 ███████╗╚██████╔╝██║░░██║░░╚██╔╝░░
 ╚══════╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░
-]]; 
--- return luav
-
-LuaV("https://sirius.menu/rayfield"):fastload("Rayfield")
+]]; return luav
