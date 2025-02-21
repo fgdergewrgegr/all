@@ -159,7 +159,7 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 	cnf["n"], cnf["nm"] = cf.d(2, cnf["name"])
 
 
-function cf.convert(data, to, arg) return cf.LuaV(cnf[cf.unLuaV(to):lower()](cf.LuaV(data), arg)) or data end
+function cf.convert(data, to, arg) data = cf.LuaV(data); return cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg)) or data end
 cf["c"], cf["con"] = cf.d(2, cf["convert"])
 
 -- tmf["____"] = function() end
@@ -199,13 +199,13 @@ local lt = luav.metadata["string"]
 -- function lt:____()  end
 	local lt = luav.data["Instance"]
 		-- ♥fwcdp♥
-			function lt:ffc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstChild(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
+			function lt:ffc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstChild(cf.c(name, "n")[1]) end; return cf.LuaV(unpack(lt)) end
 			function lt:ffct(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
 
 			function lt:wfc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:WaitForChild(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
-			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
+			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end; return unpack(lt) end
 
-			function lt:fwc(...) local lt = {...}; for i,name in lt do lt[i] = self:ffc(name) or self:wfc(name) end; return unpack(lt) end
+			function lt:fwc(...) local lt = {...}; for i,name in lt do lt[i] = self:ffc(name) or self:wfc(name) end; return cf.LuaV(unpack(lt)) end
 
 			function lt:ffd(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstDescendant(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
 
@@ -224,8 +224,8 @@ local lt = luav.metadata["string"]
 				lt["cf"], lt["cfriend"] = cf.d(2, lt["check_friend"])
 
 		--♥gets♥
-			function lt:get_children() return self[1]:GetChildren() end
-			function lt:get_descendants() return self[1]:GetDescendants() end
+			function lt:get_children() return LuaV(self[1]:GetChildren()) end
+			function lt:get_descendants() return LuaV(self[1]:GetDescendants()) end
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = cf.LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = cf.LuaV(p) end; return tree end end
 			function lt:get_char() self = self:c("p"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
