@@ -72,7 +72,11 @@ getgenv().int = tonumber
 
 -- o["_____"] = o._____.
 	o["me"] = o.p.LocalPlayer
-	o["char"] = o.me.Character
+	o["old_char"] = o.me.Character
+	o["old_hrp"] = o.old_char and o.old_char:FindFirstChild("HumanoidRootPart")
+	o["old_hum"] = o.old_char and o.old_char:FindFirstChild("Humanoid")
+	o["old_hd"] = o.old_char and o.old_char:FindFirstChild("Head")
+	o["old_tr"] = o.old_char and o.old_char:FindFirstChild("Torso")
 	o["cam"] = o.w.CurrentCamera
 	o["m"] = o.me:GetMouse()
 	o["name"] = o.me.Name
@@ -322,11 +326,11 @@ local lt = luav.metadata["string"]
 -- f["____"] = function() return cf.LuaV() end
 	f["gchar"] = function() return cf.LuaV(o.me.Character or (o.me.CharacterAdded:Wait() and o.me.Character)) end
 
-	f["hrp"] = function() return f.gchar():fwc("HumanoidRootPart") end
-	f["hum"] = function() return f.gchar():fwc("Humanoid") end
-	f["hd"] = function() return f.gchar():fwc("Head") end
+	f["ghrp"] = function() return f.gchar():fwc("HumanoidRootPart") end
+	f["ghum"] = function() return f.gchar():fwc("Humanoid") end
+	f["ghd"] = function() return f.gchar():fwc("Head") end
 
-	f["hhh"] = function() return f.hrp(), f.hum(), f.hd() end
+	f["ghhh"] = function() return f.hrp(), f.hum(), f.hd() end
 
 	f["gcam"] = function() return cf.LuaV(o.w.CurrentCamera) end
 	f["gname"] = function() return cf.LuaV(o.me.Name) end
@@ -344,6 +348,15 @@ local lt = luav.metadata["string"]
 for fname,func in cf do for ltname,_ in luav.data do luav.data[ltname][fname] = func end end
 for name,obj in o do o[name] = cf.LuaV(o[name]) end
 for name,obj in f do f[name] = cf.LuaV(f[name]) end
+
+me.CharacterAdded:Connect(function(char)
+	char = cf.LuaV(char); o["char"] = char
+	o["hrp"] = char:fwc("HumanoidRootPart")
+	o["hum"] = char:fwc("Humanoid")
+	o["hd"] = char:fwc("Head")
+	o["tr"] = char:fwc("Torso")
+end)
+
 for _,lt in luav.coredata do for name, data in lt do getgenv()[name] = data end end
 
 print[[
