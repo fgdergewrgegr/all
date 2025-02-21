@@ -304,8 +304,8 @@ local lt = luav.metadata["string"]
 		function lt:ultra_for() local flt = cf.LuaV({}); local inum = 1 for i,v in self do if type(v) == "table" then for _,v in cf.LuaV(v):ultra_for() do flt[inum] = v; inum = inum + 1 end
 		elseif type(i) == "number" then flt[inum] = v; inum = inum + 1 else flt[i] = v end end; return flt end
 		function lt:ultra_unpack() return unpack(self:uf()) end
-		function lt:print() print(unLuaV(self:u())) end
-		function lt:readable_print() local fstr = "{"; for i,v in {unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
+		function lt:print() print(cf.unLuaV(self:u())) end
+		function lt:readable_print() local fstr = "{"; for i,v in {cf.unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
 		function lt:to_global() local num = #luav.tgflt + 1; for name,func in self do luav.tgflt[num] = func; loadstring(name.." = luav.tgflt["..num.."]")() end; luav.tgflt[num] = nil end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
