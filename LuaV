@@ -193,6 +193,7 @@ local lt = luav.metadata["string"]
 	lt.__mul = function(str, num) str = str[1]; local fstr = ""; for a=1, num do fstr = fstr..str end; return fstr end
 	lt.__pow = function(str, num) str = str[1]; for a=1, num do str = str..str end; return str end
 	lt.__div = function(str1, str2) str1 = str1[1]; local _,num = str1:gsub(str2, ""); return num end
+	lt.__concat = function(str1, str2) return str1[1]..str2 end
 
 -- local lt = luav.metadata["Vector3"]
 -- 	lt.__add = function(vec1, vec2) vec2 = LuaV(vec2); if typeof(vec2) == "table" then for i,v in LuaV(vec2) do vec1[i] = vec1[i] + v end; return vec1 else vec2 = vec2("v3") end
@@ -252,10 +253,12 @@ local lt = luav.metadata["string"]
 			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = val end; return cf.LuaV(obj) end
 			function lt:create_ins(class, data, config) local format = a[class] or {}; class, data = format[1] or class, format[2] or data; local obj = self:ffc(data.Name)
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
+			function lt:destroy_child(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then lt[i] = obj[1]:Destroy() end end; return lt end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["pc"], lt["pchanged"] = cf.d(2, lt["property_changed"])
 				lt["ci"], lt["cins"] = cf.d(2, lt["create_ins"])
+				lt["dc"], lt["dchild"] = cf.d(2, lt["destroy_child"])
 
 	local lt = luav.data["function"]
 		function lt:property_changed(obj, prop) cf.unLuaV(obj):GetPropertyChangedSignal(cf.unLuaV(cf.c(prop, "s"))):Connect(self[1]) end
