@@ -164,12 +164,7 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 	cnf["n"], cnf["nm"] = cf.d(2, cnf["name"])
 
 
-function cf.convert(data, to, arg)
-	print(data, to, arg)
-	print(data[1])
-	data = cf.LuaV(data)
-	return cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg)) or data
-end
+function cf.convert(data, to, arg) data = cf.LuaV(data); return cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg)) or data end
 cf["c"], cf["con"] = cf.d(2, cf["convert"])
 
 -- tmf["____"] = function() end
