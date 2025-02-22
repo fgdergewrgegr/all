@@ -146,7 +146,8 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 		elseif typeof(data) == "string" then return (o.p[1]):FindFirstChild(data[1]) or o.p:ffcp("DisplayName", data) or (debugg and warn("cant find a player using: "..str(data[1])..": "..typeof(data)))
 		else return (debugg and warn(typeof(data).."is not supported for find a player")) end end
 	cnf["userid"] = function(data) local plr = cf.c(data, "plr"); if data ~= plr then return plr.UserId end end
-	cnf["string"] = function(data, arg) if typeof(data) == "table" then if not(arg) then arg = "" end; for _,str in data do if _ == 1 then data = str else data = data..arg..str end end; return data end end
+	cnf["string"] = function(data, arg) if cf.typeof(data) == "table" then local num = 0; if not(arg) then arg = "\n" end; for i,str in data do if typeof(i) ~= "number" then str = tostring(i).." = "..str end
+	if num == 0 then data = str else data = data..arg..str end; num = num + 1 end; return data end end
 	cnf["readable_string"] = function(data) if typeof(data) == "table" then return "{"..cf.c("s", data, ", ").."}" elseif typeof(data) == "Instance" then return typeof(data) end end
 	cnf["function"] = function(data) if typeof(data) == "string" then return loadstring(data[1]) end end
 	cnf["name"] = function(data) if typeof(data) == "Instance" then return data.Name end end
@@ -163,7 +164,12 @@ cf["d"], cf["dup"] = cf.duplicate(2, cf["duplicate"])
 	cnf["n"], cnf["nm"] = cf.d(2, cnf["name"])
 
 
-function cf.convert(data, to, arg) data = cf.LuaV(data); return cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg)) or data end
+function cf.convert(data, to, arg)
+	print(data, to, arg)
+	print(data[1])
+	data = cf.LuaV(data)
+	return cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg)) or data
+end
 cf["c"], cf["con"] = cf.d(2, cf["convert"])
 
 -- tmf["____"] = function() end
@@ -349,10 +355,8 @@ local lt = luav.metadata["string"]
 	f["vhsiy"] = function() return cf.LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):fastload("VHS IY")() end
 
 for fname,func in cf do for ltname,_ in luav.data do luav.data[ltname][fname] = func end end
-for name,obj in o do o[name] = cf.LuaV(o[name]) end
-for name,obj in f do f[name] = cf.LuaV(f[name]) end
 
-me.CharacterAdded:Connect(function(char)
+o.me.CharacterAdded:Connect(function(char)
 	char = cf.LuaV(char); o["char"] = char
 	o["hrp"] = char:fwc("HumanoidRootPart")
 	o["hum"] = char:fwc("Humanoid")
@@ -360,6 +364,16 @@ me.CharacterAdded:Connect(function(char)
 	o["tr"] = char:fwc("Torso")
 end)
 
+for name,obj in o do o[name] = cf.LuaV(o[name]) end
+for name,obj in f do f[name] = cf.LuaV(f[name]) end
 for _,lt in luav.coredata do for name, data in lt do getgenv()[name] = data end end
 
-return luav
+print[[
+	
+██╗░░░░░██╗░░░██╗░█████╗░██╗░░░██╗
+██║░░░░░██║░░░██║██╔══██╗██║░░░██║
+██║░░░░░██║░░░██║███████║╚██╗░██╔╝
+██║░░░░░██║░░░██║██╔══██║░╚████╔╝░
+███████╗╚██████╔╝██║░░██║░░╚██╔╝░░
+╚══════╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░
+]]; return luav
