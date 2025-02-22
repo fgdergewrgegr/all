@@ -5,7 +5,7 @@
 
 local path, luav = "LuaV/LuaV.lua", getgenv().luav if not(luav) then
 if isfile(path) then luav = dofile(path)() else
-local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
+local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV%20WP")
 task.defer(writefile, path, data); luav = loadstring(data)() end end; path = nil
 
 
