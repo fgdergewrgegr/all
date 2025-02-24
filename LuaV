@@ -242,7 +242,7 @@ local lt = luav.metadata["string"]
 				lt["gcr"], lt["gchar"] = cf.d(2, lt["get_char"])
 
 		--♥sets♥
-			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s"), value); return cf.LuaV(value) end
+			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s")[1], value); return cf.LuaV(value) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["sa"], lt["sattribute"] = cf.d(2, lt["set_attribute"])
@@ -267,7 +267,7 @@ local lt = luav.metadata["string"]
 		function lt:ptime(...) local data = {self:time(...)}; print(data[1]); data[1] = nil; return unpack(data) end
 		function lt:taskspawn(...) task.spawn(self[1], ...) end
 		function lt:taskdefer(...) task.defer(self[1], ...) end
-		function lt:speedtest(num, ...) local time = 0; for a=1,num do time = time + {self:t()}[1] end; return time/num end
+		function lt:speedtest(num, ...) local time = 0; for a=1,num do local args = {self:t()}; time = time + args[1] end; return time/num end
 		function lt:pspeedtest(num, ...) print(self:st(num, ...)) end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
