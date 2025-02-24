@@ -3,11 +3,9 @@
 --[[
 
 
-local path, luav = "LuaV/LuaV.lua", getgenv().luav if not(luav) then
-if isfile(path) then luav = dofile(path)() else
+local path = "LuaV/LuaV.lua"; if not(getgenv().luav) then if isfile(path) then dofile(path)() else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(writefile, path, data); luav = loadstring(data)() end end; path = nil
-
+task.defer(writefile, path, data); loadstring(data)() end end; path = nil
 
 ]]
 
@@ -269,6 +267,8 @@ local lt = luav.metadata["string"]
 		function lt:ptime(...) local data = {self:time(...)}; print(data[1]); data[1] = nil; return unpack(data) end
 		function lt:taskspawn(...) task.spawn(self[1], ...) end
 		function lt:taskdefer(...) task.defer(self[1], ...) end
+		function lt:speedtest(num, ...) local time = 0; for a=1,num do time = time + {self:t()}[1] end; return time/num end
+		function lt:pspeedtest(num, ...) print(self:st(num, ...)) end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 			lt["pc"], lt["pchanged"] = cf.d(2, lt["property_changed"])
@@ -278,6 +278,8 @@ local lt = luav.metadata["string"]
 			lt["pt"], lt["ptm"] = cf.d(2, lt["ptime"])
 			lt["ts"], lt["tspawn"] = cf.d(2, lt["taskspawn"])
 			lt["td"], lt["tdefer"] = cf.d(2, lt["taskdefer"])
+			lt["st"], lt["spdt"] = cf.d(2, lt["speedtest"])
+			lt["pst"], lt["pspdt"] = cf.d(2, lt["pspeedtest"])
 
 	local lt = luav.data["string"]
 		function lt:read_write(name) if name then write("LuaV/saves/"..name..".txt", self[1]) else return read("LuaV/saves/"..self[1]..".txt") end end
