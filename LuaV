@@ -258,12 +258,14 @@ local lt = luav.metadata["string"]
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
 			function lt:destroy_child(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then lt[i] = obj[1]:Destroy() end end; return lt end
 			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == name then func(child) end end else func(child) end end) end
+			function lt:fire_server(...) self[1]:FireServer(...) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["pc"], lt["pchanged"] = cf.d(2, lt["property_changed"])
 				lt["ci"], lt["cins"] = cf.d(2, lt["create_ins"])
 				lt["dc"], lt["dchild"] = cf.d(2, lt["destroy_child"])
 				lt["ca"], lt["cadded"] = cf.d(2, lt["child_added"])
+				lt["f"], lt["fserver"] = cf.d(2, lt["fire_server"])
 
 	local lt = luav.data["function"]
 		function lt:property_changed(obj, prop) cf.unLuaV(obj):GetPropertyChangedSignal(cf.unLuaV(cf.c(prop, "s"))):Connect(self[1]) end
