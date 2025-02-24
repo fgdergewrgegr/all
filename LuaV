@@ -54,6 +54,10 @@ getgenv().is = isfile
 getgenv().str = tostring
 getgenv().int = tonumber
 
+getgenv().ts = task.spawn
+getgenv().td = task.defer
+getgenv().tw = task.wait
+
 -- o["_____"] = game:GetService("_____")
 	o["w"] = game:GetService("Workspace")
 	o["l"] = game:GetService("Lighting")
