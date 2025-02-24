@@ -44,20 +44,6 @@ local a = luav.iadds
 
 local timefunc, timefunc1 = tick(), tick()
 
-getgenv().write = writefile
-getgenv().read = readfile
-getgenv().dof = dofile
-getgenv().app = appendfile
-getgenv().del = delfile
-getgenv().is = isfile
-
-getgenv().str = tostring
-getgenv().int = tonumber
-
-getgenv().ts = task.spawn
-getgenv().td = task.defer
-getgenv().tw = task.wait
-
 -- o["_____"] = game:GetService("_____")
 	o["w"] = game:GetService("Workspace")
 	o["l"] = game:GetService("Lighting")
@@ -121,6 +107,20 @@ function cf.LuaV(...)
 		end
 	end; return unpack(lt)
 end
+
+getgenv().write = cf.LuaV(writefile)
+getgenv().read = cf.LuaV(readfile)
+getgenv().dof = cf.LuaV(dofile)
+getgenv().app = cf.LuaV(appendfile)
+getgenv().del = cf.LuaV(delfile)
+getgenv().is = cf.LuaV(isfile)
+
+getgenv().str = cf.LuaV(tostring)
+getgenv().int = cf.LuaV(tonumber)
+
+getgenv().ts = cf.LuaV(task.spawn)
+getgenv().td = cf.LuaV(task.defer)
+getgenv().tw = cf.LuaV(task.wait)
 
 function cf.unLuaV(...)
 	local lt = {...}
