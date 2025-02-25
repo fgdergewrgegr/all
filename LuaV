@@ -118,9 +118,10 @@ getgenv().is = cf.LuaV(isfile)
 getgenv().str = cf.LuaV(tostring)
 getgenv().int = cf.LuaV(tonumber)
 
-getgenv().ts = cf.LuaV(task.spawn)
-getgenv().td = cf.LuaV(task.defer)
 getgenv().tw = cf.LuaV(task.wait)
+getgenv().td = cf.LuaV(task.defer)
+getgenv().ts = cf.LuaV(task.spawn)
+getgenv().tdl = cf.LuaV(task.delay)
 
 function cf.unLuaV(...)
 	local lt = {...}
@@ -210,7 +211,7 @@ local lt = luav.metadata["string"]
 			function lt:ffc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstChild(cf.c(name, "n")[1]) end; return cf.LuaV(unpack(lt)) end
 			function lt:ffct(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
 
-			function lt:wfc(...) self = self[1]; local lt = {...}; for i,name in lt do cf.c(name, "n")[1]; while not(lt[i]) and task.wait() do lt[i] = self:WaitForChild(name) end end return cf.LuaV(unpack(lt)) end
+			function lt:wfc(...) self = self[1]; local lt = {...}; for i,name in lt do name = cf.c(name, "n")[1]; while not(lt[i]) and task.wait() do lt[i] = self:WaitForChild(name) end end return cf.LuaV(unpack(lt)) end
 			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end; return unpack(lt) end
 
 			function lt:fwc(...) local lt = {...}; for i,name in lt do lt[i] = self:ffc(name) or self:wfc(name) end; return cf.LuaV(unpack(lt)) end
