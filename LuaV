@@ -355,7 +355,7 @@ local lt = luav.metadata["string"]
 	f["grt"] = function() return cf.LuaV(o.p.RespawnTime) end
 
 	f["tah"] = function() return cf.LuaV(o.m.Target, o.m.Hit) end
-	f["plrs"] = function() return {cf.LuaV(unpack(o.p[1]:GetPlayers()))} end
+	f["plrs"] = function() return cf.LuaV({cf.LuaV(unpack(o.p[1]:GetPlayers()))}) end
 	f["iy"] = function() return cf.LuaV("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):fastload("IY")() end
 	f["dex"] = function() return cf.LuaV("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"):fastload("DEX")() end
 	f["vhsiy"] = function() return cf.LuaV("https://raw.githubusercontent.com/fgdergewrgegr/ftap/refs/heads/main/my%20IY"):fastload("VHS IY")() end
