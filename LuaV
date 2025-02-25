@@ -45,18 +45,18 @@ local a = luav.iadds
 local timefunc, timefunc1 = tick(), tick()
 
 -- o["_____"] = game:GetService("_____")
-	o["w"] = game:GetService("Workspace")
-	o["l"] = game:GetService("Lighting")
-	o["p"] = game:GetService("Players")
-	o["r"] = game:GetService("RunService")
-	o["db"] = game:GetService("Debris")
-	o["rs"] = game:GetService("ReplicatedStorage")
-	o["rf"] = game:GetService("ReplicatedFirst")
-	o["sg"] = game:GetService("StarterGui")
+	o["w"] = cloneref(game:GetService("Workspace"))
+	o["l"] = cloneref(game:GetService("Lighting"))
+	o["p"] = cloneref(game:GetService("Players"))
+	o["r"] = cloneref(game:GetService("RunService"))
+	o["db"] = cloneref(game:GetService("Debris"))
+	o["rs"] = cloneref(game:GetService("ReplicatedStorage"))
+	o["rf"] = cloneref(game:GetService("ReplicatedFirst"))
+	o["sg"] = cloneref(game:GetService("StarterGui"))
 	o["cg"] = gethui() or game:GetService("CoreGui")
-	o["chat"] = game:GetService("Chat")
-	o["hs"] = game:GetService("HttpService")
-	o["uis"] = game:GetService("UserInputService")
+	o["chat"] = cloneref(game:GetService("Chat"))
+	o["hs"] = cloneref(game:GetService("HttpService"))
+	o["uis"] = cloneref(game:GetService("UserInputService"))
 
 -- o["_____"] = o._____.
 	o["me"] = o.p.LocalPlayer
@@ -258,7 +258,7 @@ local lt = luav.metadata["string"]
 			function lt:create_ins(class, data, config) local format = a[class] or {}; class, data = format[1] or class, format[2] or data; local obj = self:ffc(data.Name)
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
 			function lt:destroy_child(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then lt[i] = obj[1]:Destroy() end end; return lt end
-			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(child)) end end else func(cf.LuaV(child)) end end) end
+			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(cloneref(child))) end end else func(cf.LuaV(cloneref(child))) end end) end
 			function lt:fire_server(...) self[1]:FireServer(...) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
