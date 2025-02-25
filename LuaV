@@ -210,7 +210,7 @@ local lt = luav.metadata["string"]
 			function lt:ffc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:FindFirstChild(cf.c(name, "n")[1]) end; return cf.LuaV(unpack(lt)) end
 			function lt:ffct(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then self = obj end; lt[i] = obj end return unpack(lt) end
 
-			function lt:wfc(...) local lt = {...}; for i,name in lt do lt[i] = self[1]:WaitForChild(cf.c(name, "n")[1]) end return cf.LuaV(unpack(lt)) end
+			function lt:wfc(...) self = self[1]; local lt = {...}; for i,name in lt do cf.c(name, "n")[1]; while not(lt[i]) and task.wait() do lt[i] = self:WaitForChild(name) end end return cf.LuaV(unpack(lt)) end
 			function lt:wfct(...) local lt = {...}; for i,name in lt do local obj = self:wfc(name); if obj then self = obj end; lt[i] = obj end; return unpack(lt) end
 
 			function lt:fwc(...) local lt = {...}; for i,name in lt do lt[i] = self:ffc(name) or self:wfc(name) end; return cf.LuaV(unpack(lt)) end
