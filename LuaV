@@ -233,8 +233,8 @@ local lt = luav.metadata["string"]
 				lt["cf"], lt["cfriend"] = cf.d(2, lt["check_friend"])
 
 		--♥gets♥
-			function lt:get_children() return LuaV(self[1]:GetChildren()) end
-			function lt:get_descendants() return LuaV(self[1]:GetDescendants()) end
+			function lt:get_children() return cf.LuaV({cf.LuaV(unpack(self[1]:GetChildren()))}) end
+			function lt:get_descendants() return cf.LuaV({cf.LuaV(unpack(self[1]:GetDescendants()))}) end
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = cf.LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = cf.LuaV(p) end; return tree end end
 			function lt:get_char() self = self:c("p"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
