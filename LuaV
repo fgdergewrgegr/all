@@ -254,6 +254,7 @@ local lt = luav.metadata["string"]
 				lt["ga"], lt["gattribute"] = cf.d(2, lt["get_attribute"])
 				lt["gp"], lt["gparents"] = cf.d(2, lt["get_parents"])
 				lt["gcr"], lt["gchar"] = cf.d(2, lt["get_char"])
+				lt["go"], lt["gobjs"] = cf.d(2, lt["get_objs"])
 
 		--♥sets♥
 			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s")[1], cf.unLuaV(value)); return cf.LuaV(value) end
