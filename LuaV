@@ -368,11 +368,11 @@ local lt = luav.metadata["string"]
 for fname,func in af do for ltname,_ in luav.data do luav.data[ltname][fname] = func end end
 
 o.me.CharacterAdded:Connect(function(char)
-	char = cf.LuaV(char); o["char"] = char
-	o["hrp"] = char:fwc("HumanoidRootPart")
-	o["hum"] = char:fwc("Humanoid")
-	o["hd"] = char:fwc("Head")
-	o["tr"] = char:fwc("Torso")
+	char = cf.LuaV(char); getgenv()["char"] = char
+	getgenv()["hrp"] = char:fwc("HumanoidRootPart")
+	getgenv()["hum"] = char:fwc("Humanoid")
+	getgenv()["hd"] = char:fwc("Head")
+	getgenv()["tr"] = char:fwc("Torso")
 end)
 
 for name,obj in o do o[name] = cf.LuaV(o[name]) end
