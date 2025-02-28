@@ -87,6 +87,15 @@ function cf.typeof(obj)
 	else return type end
 end
 
+function cf.unLuaV(...)
+	local lt = {...}
+	for i,obj in lt do
+		if typeof(obj) == "table" and obj["luav"] then
+			lt[i] = obj[1]
+		end
+	end; return unpack(lt)
+end
+
 function cf.LuaV(...)
 	local lt = {...}
 	for i,obj in lt do
@@ -103,7 +112,8 @@ function cf.LuaV(...)
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
 			elseif type ~= "table" then
-				local mlt = {__index = function(ltt,arg) return stable[arg] or cf.LuaV(ltt[1][arg]) end, __newindex = function(ltt,i,v) ltt[1][i] = v end}
+				local mlt = {__index = function(s,arg) return stable[arg] or cf.LuaV(s[1][cf.unLuaV(arg)]) end,
+				__newindex = function(s,i,v) s[1][cf.unLuaV(i)] = cf.unLuaV(v) end}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
 			end
@@ -125,15 +135,6 @@ getgenv().tw = cf.LuaV(task.wait)
 getgenv().td = cf.LuaV(task.defer)
 getgenv().ts = cf.LuaV(task.spawn)
 getgenv().tdl = cf.LuaV(task.delay)
-
-function cf.unLuaV(...)
-	local lt = {...}
-	for i,obj in lt do
-		if typeof(obj) == "table" and obj["luav"] then
-			lt[i] = obj[1]
-		end
-	end; return unpack(lt)
-end
 
 function cf.duplicate(num, data) if typeof(num) == "table" then data, num = num, temp end; local lt = {}; for a=1,num do lt[#lt+1] = data end; return unpack(lt) end
 cf["d"], cf["dup"], af["d"], af["dup"] = cf.duplicate(4, cf["duplicate"])
