@@ -98,11 +98,11 @@ function cf.LuaV(...)
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable(obj, mlt)
 			elseif type == "function" then
-				local mlt = {__index = stable, __call = function(s, ...) return s[1](...) end}
+				local mlt = {__index = stable, __call = function(s, ...) return cf.LuaV(s[1](...)) end}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
 			elseif type ~= "table" then
-				local mlt = {__index = function(ltt,arg) return stable[arg] or ltt[1][arg] end}
+				local mlt = {__index = function(ltt,arg) return stable[arg] or cf.LuaV(ltt[1][arg]) end}
 				if metastable then for i,v in metastable do mlt[i] = v end end
 				lt[i] = setmetatable({obj, luav = type}, mlt)
 			end
@@ -120,7 +120,7 @@ getgenv().is = cf.LuaV(isfile)
 getgenv().str = cf.LuaV(tostring)
 getgenv().int = cf.LuaV(tonumber)
 
-getgenv().tw = cf.LuaV(cf.qw)
+getgenv().tw = cf.LuaV(task.wait)
 getgenv().td = cf.LuaV(task.defer)
 getgenv().ts = cf.LuaV(task.spawn)
 getgenv().tdl = cf.LuaV(task.delay)
@@ -183,7 +183,7 @@ cf["c"], cf["con"], af["c"], af["con"] = cf.d(4, cf["convert"])
 function cf.time(cmd, svar) return tmf[cmd](svar) end
 cf["gt"], cf["gtime"] = cf.d(2, cf["get_time"])
 
-function cf.quick_wait(num) num = num or 0; local t = tick(); while tick() < t+num do game:GetService("RunService").Heartbeat:Wait() end end
+function cf.quick_wait(num) num = num or 0.0000000001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.Heartbeat:Wait() end; return tt end
 cf["qw"], cf["qwait"] = cf.d(2, cf["quick_wait"])
 
 local lt = luav.metadata["table"]
@@ -264,6 +264,7 @@ local lt = luav.metadata["string"]
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
 			function lt:destroy_child(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then lt[i] = obj[1]:Destroy() end end; return lt end
 			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(child)) end end else func(cf.LuaV(child)) end end) end
+			function lt:try(name, ...) local args = cf.LuaV({...}):unLuaV(); local args = {pcall(loadstring("return function(obj, ...) return obj:"..name.."(...) end")(), self[1], unpack(args))}; return cf.LuaV(unpack(args, 2)) end
 			function lt:fire_server(...) self[1]:FireServer(...) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
@@ -331,6 +332,7 @@ local lt = luav.metadata["string"]
 		function lt:print() print(cf.unLuaV(self:u())) end
 		function lt:readable_print() local fstr = "{"; for i,v in {cf.unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
 		function lt:to_global() local num = #luav.tgflt + 1; for name,func in self do luav.tgflt[num] = func; loadstring(name.." = luav.tgflt["..num.."]")() end; luav.tgflt[num] = nil end
+		function lt:unLuaV() for i,v in self do self[i] = cf.unLuaV(v) end; return self end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 			lt["fi"], lt["fndi"] = cf.d(2, lt["find_i"])
