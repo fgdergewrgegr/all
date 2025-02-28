@@ -252,7 +252,7 @@ local lt = luav.metadata["string"]
 				lt["gcr"], lt["gchar"] = cf.d(2, lt["get_char"])
 
 		--♥sets♥
-			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s")[1], value); return cf.LuaV(value) end
+			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s")[1], cf.unLuaV(value)); return cf.LuaV(value) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["sa"], lt["sattribute"] = cf.d(2, lt["set_attribute"])
@@ -265,7 +265,7 @@ local lt = luav.metadata["string"]
 			function lt:destroy_child(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then lt[i] = obj[1]:Destroy() end end; return lt end
 			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(child)) end end else func(cf.LuaV(child)) end end) end
 			function lt:try(name, ...) local args = cf.LuaV({...}):unLuaV(); local args = {pcall(loadstring("return function(obj, ...) return obj:"..name.."(...) end")(), self[1], unpack(args))}; return cf.LuaV(unpack(args, 2)) end
-			function lt:fire_server(...) self[1]:FireServer(...) end
+			function lt:fire_server(...) self:try("FireServer", ...) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["pc"], lt["pchanged"] = cf.d(2, lt["property_changed"])
