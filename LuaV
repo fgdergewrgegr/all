@@ -184,7 +184,7 @@ cf["c"], cf["con"], af["c"], af["con"] = cf.d(4, cf["convert"])
 function cf.time(cmd, svar) return tmf[cmd](svar) end
 cf["gt"], cf["gtime"] = cf.d(2, cf["get_time"])
 
-function cf.quick_wait(num) num = num or 0.0000000001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.Heartbeat:Wait() end; return tt end
+function cf.quick_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.Heartbeat:Wait() end; return tt end
 cf["qw"], cf["qwait"] = cf.d(2, cf["quick_wait"])
 
 local lt = luav.metadata["table"]
