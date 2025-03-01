@@ -270,7 +270,7 @@ local lt = luav.metadata["string"]
 			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = val end; return cf.LuaV(obj) end
 			function lt:create_ins(class, data, config) local format = a[class] or {}; class, data = format[1] or class, format[2] or data; local obj = self:ffc(data.Name)
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
-			function lt:destroy_child(...) local lt = {...}; for i,name in lt do local obj = self:ffc(name); if obj then lt[i] = obj[1]:Destroy() end end; return lt end
+			function lt:destroy_child(...) local lt = {...}; for i,name in lt do while self:ffc(name) do lt[i] = self:ffc(name)[1]:Destroy() end end; return lt end
 			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(child)) end end else func(cf.LuaV(child)) end end) end
 			function lt:try(name, ...) local args = cf.LuaV({...}):unLuaV(); local args = {pcall(loadstring("return function(obj, ...) return obj:"..name.."(...) end")(), self[1], unpack(args))}; return cf.LuaV(unpack(args, 2)) end
 			function lt:fire_server(...) self[1]:FireServer(...) end
