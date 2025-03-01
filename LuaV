@@ -207,6 +207,8 @@ local lt = luav.metadata["string"]
 	lt.__div = function(str1, str2) str1 = str1[1]; local _,num = str1:gsub(str2, ""); return (num ~= 0 and num) end
 	lt.__concat = function(str1, str2) return cf.LuaV(str1[1]..str2) end
 	lt.__eq = function(str, obj) return str[1] == cf.unLuaV(obj) end
+	lt.__lt = function(str, obj) return str[1] < cf.unLuaV(obj) end
+	lt.__le = function(str, obj) return str[1] <= cf.unLuaV(obj) end
 
 -- local lt = luav.metadata["Vector3"]
 -- 	lt.__add = function(vec1, vec2) vec2 = LuaV(vec2); if typeof(vec2) == "table" then for i,v in LuaV(vec2) do vec1[i] = vec1[i] + v end; return vec1 else vec2 = vec2("v3") end
