@@ -196,8 +196,8 @@ local lt = luav.metadata["table"]
 	lt.__div = function(lt, obj) local num = 0; for _,v in lt do if obj == v then num = num + 1 end end; return num end
 	lt.__idiv = function(lt, obj) local num = 0; for i,_ in lt do if obj == i then num = num + 1 end end; return num end
 	lt.__mod = function(lt, obj) local num = 0; for i,v in lt do if obj == i or obj == v then num = num + 1 end end; return num end
-	-- lt.__eq = function(lt1, lt2) local t = true; for i,v in lt1 do if lt2[i] ~= v then t = false end end; return t end
-	lt.__eq = function(lt, obj) return lt[1] == cf.unLuaV(obj) end
+	lt.__eq = function(lt1, lt2) local t = true; for i,v in lt1 do if lt2[i] ~= v then t = false end end; return t end
+	-- lt.__eq = function(lt, obj) return lt[1] == cf.unLuaV(obj) end
 
 local lt = luav.metadata["string"]
 	lt.__add = function(str1, str2) str1 = str1[1]; return str1.." "..str2 end
@@ -247,7 +247,7 @@ local lt = luav.metadata["string"]
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = cf.LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = cf.LuaV(p) end; return tree end end
 			function lt:get_char() self = self:c("p"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
-			function lt:get_objs(class) local lt = cf.LuaV({}); for _,obj in self:gc() do if obj:try("IsA", class) then lt:i(obj) end end; return lt end
+			function lt:get_objs(class) local lt = cf.LuaV({}); for _,obj in self:gc() do if obj:IsA(class) then lt:i(obj) end end; return lt end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["gc"], lt["gchildren"] = cf.d(2, lt["get_children"])
