@@ -46,7 +46,7 @@ local a = luav.iadds
 
 local timefunc, timefunc1 = tick(), tick()
 
--- o["_____"] = game:GetService("_____")
+-- o["_____"] = cloneref(game:GetService("_____"))
 	o["w"] = cloneref(game:GetService("Workspace"))
 	o["l"] = cloneref(game:GetService("Lighting"))
 	o["p"] = cloneref(game:GetService("Players"))
@@ -57,7 +57,8 @@ local timefunc, timefunc1 = tick(), tick()
 	o["sg"] = cloneref(game:GetService("StarterGui"))
 	o["ms"] = cloneref(game:GetService("MaterialService"))
 	o["cg"] = gethui() or game:GetService("CoreGui")
-	o["chat"] = cloneref(game:GetService("Chat"))
+	o["cs"] = cloneref(game:GetService("Chat"))
+	o["ps"] = cloneref(game:GetService("PhysicsService"))
 	o["hs"] = cloneref(game:GetService("HttpService"))
 	o["uis"] = cloneref(game:GetService("UserInputService"))
 
@@ -187,6 +188,9 @@ cf["gt"], cf["gtime"] = cf.d(2, cf["get_time"])
 
 function cf.quick_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.Heartbeat:Wait() end; return tt end
 cf["qw"], cf["qwait"] = cf.d(2, cf["quick_wait"])
+
+function cf.physic_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.RenderStepped:Wait() end; return tt end
+cf["pw"], cf["pwait"] = cf.d(2, cf["physic_wait"])
 
 local lt = luav.metadata["table"]
 	lt.__add = function(lt1, lt2) for i,v in lt2 do if typeof(i) == "number" then lt1:i(LuaV(v)) else lt1[i] = LuaV(v) end end return lt1 end
