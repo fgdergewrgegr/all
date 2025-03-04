@@ -122,20 +122,50 @@ function cf.LuaV(...)
 	end; return unpack(lt)
 end
 
-getgenv().write = cf.LuaV(writefile)
-getgenv().read = cf.LuaV(readfile)
-getgenv().dof = cf.LuaV(dofile)
-getgenv().app = cf.LuaV(appendfile)
-getgenv().del = cf.LuaV(delfile)
-getgenv().is = cf.LuaV(isfile)
+-- getgenv().____ = cf.LuaV(____)
+	getgenv().read = cf.LuaV(readfile)
+	getgenv().dof = cf.LuaV(dofile)
+	getgenv().del = cf.LuaV(delfile)
 
-getgenv().str = cf.LuaV(tostring)
-getgenv().int = cf.LuaV(tonumber)
+	getgenv().isf = cf.LuaV(isfile)
+	getgenv().isfl = cf.LuaV(isfolder)
+	getgenv().ltf = cf.LuaV(listfiles)
+	
+	getgenv().str = cf.LuaV(tostring)
+	getgenv().int = cf.LuaV(tonumber)
 
-getgenv().tw = cf.LuaV(task.wait)
-getgenv().td = cf.LuaV(task.defer)
-getgenv().ts = cf.LuaV(task.spawn)
-getgenv().tdl = cf.LuaV(task.delay)
+	getgenv().tw = cf.LuaV(task.wait)
+	getgenv().td = cf.LuaV(task.defer)
+	getgenv().ts = cf.LuaV(task.spawn)
+	getgenv().tdl = cf.LuaV(task.delay)
+
+	getgenv().cprint = cf.LuaV(rconsoleprint)
+	getgenv().ctitle = cf.LuaV(rconsolesettitle)
+	getgenv().cinput = cf.LuaV(rconsoleinput)
+	getgenv().cclear = cf.LuaV(rconsoleclear)
+
+	getgenv().lz4 = cf.LuaV(lz4compress)
+	getgenv().dlz4 = cf.LuaV(lz4decompress)
+
+	getgenv().scboard = cf.LuaV(setclipboard)
+	getgenv().sfps = cf.LuaV(setfpscap)
+
+local function anti_path(path)
+	local fpath = ""
+	for _,name in cf.unLuaV(path):split("/") do
+		if not(is(name)) or not(isf(path)) then
+			if name:find(".") then writefile(fpath..name, "")
+			else makefolder(fpath.."/"..name) end
+			fpath = fpath.."/"..name
+		end
+	end
+end
+
+-- getgenv().____ = function()  end
+	getgenv().write = function(path, data) anti_path(path); writefile(path, data) end
+	getgenv().make = function(path) anti_path(path); makefolder(path) end
+	getgenv().app = function(path, data) anti_path(path); appendfile(path, data) end
+	getgenv().is = function(path) return (isf(path) and "file") or (isfl(path) and "folder") end
 
 function cf.duplicate(num, data) if typeof(num) == "table" then data, num = num, temp end; local lt = {}; for a=1,num do lt[#lt+1] = data end; return unpack(lt) end
 cf["d"], cf["dup"], af["d"], af["dup"] = cf.duplicate(4, cf["duplicate"])
