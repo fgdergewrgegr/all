@@ -181,7 +181,7 @@ function cf.bchat(msg, num, length) for a=1,(num or 5) do cf.echat(cf.rtext(leng
 		local max = #lt
 		for i,name in lt do
 			if not(is(name)) then
-				if fpath ~= "" then fpath fpath.."/" end
+				if fpath ~= "" then fpath = fpath.."/" end
 				fpath = fpath..name
 				if i == max then writefile(fpath, "")
 				else makefolder(fpath) end
