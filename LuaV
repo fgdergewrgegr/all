@@ -175,12 +175,13 @@ function cf.bchat(msg, num, length) for a=1,(num or 5) do cf.echat(cf.rtext(leng
 	getgenv().load = cf.LuaV(loadstring)
 
 function anti_path(path)
-	local fpath = ""
-	for _,name in cf.unLuaV(path):split("/") do
+	local fpath, lt = "", cf.unLuaV(path):split("/")
+	local max = #lt
+	for i,name in lt do
 		if not(is(name)) or not(isf(path)) then
-			if name:find(".") then writefile(fpath.."/"..name, "")
-			else makefolder(fpath.."/"..name) end
-			fpath = fpath.."/"..name
+			fpath = ((fpath ~= "" and fpath.."/") or "")..name
+			if i == max then writefile(fpath, "")
+			else makefolder(fpath) end
 		end
 	end
 end
