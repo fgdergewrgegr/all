@@ -5,7 +5,7 @@
 
 local path = "LuaV/LuaV.lua"; if not(getgenv().luav) then if isfile(path) then dofile(path)() else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(writefile, path, data); loadstring(data)() end end; path = nil
+task.defer(writefile, path, data); load(data)() end end; path = nil
 
 ]]
 
@@ -149,6 +149,7 @@ end
 
 	getgenv().scboard = cf.LuaV(setclipboard)
 	getgenv().sfps = cf.LuaV(setfpscap)
+	getgenv().load = cf.LuaV(loadstring)
 
 local function anti_path(path)
 	local fpath = ""
@@ -187,7 +188,7 @@ cf["d"], cf["dup"], af["d"], af["dup"] = cf.duplicate(4, cf["duplicate"])
 	cnf["string"] = function(data, arg) if cf.typeof(data) == "table" then local num = 0; if not(arg) then arg = "\n" end; for i,str in data do if typeof(i) ~= "number" then str = tostring(i).." = "..str end
 	if num == 0 then data = str else data = data..arg..str end; num = num + 1 end; return data end end
 	cnf["readable_string"] = function(data) if typeof(data) == "table" then return "{"..cf.c("s", data, ", ").."}" elseif typeof(data) == "Instance" then return typeof(data) end end
-	cnf["function"] = function(data) if typeof(data) == "string" then return loadstring(data[1]) end end
+	cnf["function"] = function(data) if typeof(data) == "string" then return load(data[1]) end end
 	cnf["name"] = function(data) if typeof(data) == "Instance" then return data.Name end end
 
 -- cnf["_____"], cnf["_____"] = cf.d(2, cnf["_____"])
@@ -306,7 +307,7 @@ local lt = luav.metadata["string"]
 			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
 			function lt:destroy_child(...) local lt = {...}; for i,name in lt do while self:ffc(name) do lt[i] = self:ffc(name)[1]:Destroy() end end; return lt end
 			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(child)) end end else func(cf.LuaV(child)) end end) end
-			function lt:try(name, ...) local args = cf.LuaV({...}):unLuaV(); local args = {pcall(loadstring("return function(obj, ...) return obj:"..name.."(...) end")(), self[1], unpack(args))}; return cf.LuaV(unpack(args, 2)) end
+			function lt:try(name, ...) local args = cf.LuaV({...}):unLuaV(); local args = {pcall(load("return function(obj, ...) return obj:"..name.."(...) end")(), self[1], unpack(args))}; return cf.LuaV(unpack(args, 2)) end
 			function lt:fire_server(...) self[1]:FireServer(...) end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
@@ -344,9 +345,9 @@ local lt = luav.metadata["string"]
 		function lt:save_run(name) if name then write("LuaV/saves/"..name..".func", self[1]) else return read("LuaV/saves/"..self[1]..".func") end end
 		function lt:fastload(name) local fname = name or self[1]; local path = "LuaV/fastload/"..fname.."/"..fname; if name then self = self[1]
 		if is(path..".lua") then cf.LuaV(write):td(path..".link", self); cf.LuaV(write):td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
-		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return loadstring(data) end
+		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return load(data) end
 		else cf.LuaV(write):td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
-		function lt:run(...) return loadstring(self[1])(...) end
+		function lt:run(...) return load(self[1])(...) end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 			lt["tn"], lt["tnum"] = cf.d(2, lt["tonumbr"])
@@ -373,7 +374,7 @@ local lt = luav.metadata["string"]
 		function lt:ultra_unpack() return unpack(self:uf()) end
 		function lt:print() print(cf.unLuaV(self:u())) end
 		function lt:readable_print() local fstr = "{"; for i,v in {cf.unLuaV(self:u())} do if fstr ~= "{" then fstr = fstr..", "..str(v) else fstr = fstr..str(v) end end; print(fstr.."}") end
-		function lt:to_global() local num = #luav.tgflt + 1; for name,func in self do luav.tgflt[num] = func; loadstring(name.." = luav.tgflt["..num.."]")() end; luav.tgflt[num] = nil end
+		function lt:to_global() local num = #luav.tgflt + 1; for name,func in self do luav.tgflt[num] = func; load(name.." = luav.tgflt["..num.."]")() end; luav.tgflt[num] = nil end
 		function lt:unLuaV() for i,v in self do self[i] = cf.unLuaV(v) end; return self end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
