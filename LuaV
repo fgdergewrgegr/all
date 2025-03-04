@@ -79,8 +79,10 @@ local timefunc, timefunc1 = tick(), tick()
 
 -- o["_____"..add] = o.rs:WaitForChild("_____")
 	local add, adds = "_event", "_event"
-	o["chat"..adds] = o.rs:WaitForChild("DefaultChatSystemChatEvents")
+	o["chat"..adds] = o.rs:FindFirstChild("DefaultChatSystemChatEvents")
+	if o["chat"..adds] then
 		o["saymsg"..add] = o["chat"..adds]:WaitForChild("SayMessageRequest")
+	end
 
 -- o["_____"] = 
 	o["mhv3"] = Vector3.new("inf", "inf", "inf")
@@ -129,7 +131,7 @@ end
 
 function cf.rtext(length, symbols, letters, numbers)
 	symbols = symbols or {"-", "_", "=", "+", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "`", "~", "{", "}", "[", "]", "|", "/", ",", ".", ";", ":", "'", '"', "?", "<", ">", "\\"}
-	letters = letters or {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "O.m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
+	letters = letters or {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	numbers = numbers or {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 	local ftext, lt = "", {symbols, letters, numbers}
 	for i = 1, length do
