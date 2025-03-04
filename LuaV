@@ -77,6 +77,11 @@ local timefunc, timefunc1 = tick(), tick()
 	o["muid"] = o.me.UserId
 	o["rt"] = o.p.RespawnTime
 
+-- o["_____"..add] = o.rs:WaitForChild("_____")
+	local add, adds = "_event", "_event"
+	o["chat"..adds] = o.rs:WaitForChild("DefaultChatSystemChatEvents")
+		o["saymsg"..add] = o["chat"..adds]:WaitForChild("SayMessageRequest")
+
 -- o["_____"] = 
 	o["mhv3"] = Vector3.new("inf", "inf", "inf")
 	o["nv3"] = Vector3.new()
@@ -121,6 +126,10 @@ function cf.LuaV(...)
 		end
 	end; return unpack(lt)
 end
+
+function cf.chat(msg) o.saymsg_event:f(msg, "ALL") end
+function cf.pchat(msg) o.p[1]:chat(msg) end
+function cf.lchat(msg, size, color, font) o.sg[1]:SetCore("ChatMakeSystemMessage", {Text = msg, Color = color or Color3.fromRGB(255, 0, 0), TextSize = size or 18, Font = font or Enum.Font.SourceSansBold}) end
 
 -- getgenv().____ = cf.LuaV(____)
 	getgenv().read = cf.LuaV(readfile)
