@@ -179,7 +179,8 @@ function anti_path(path)
 	local max = #lt
 	for i,name in lt do
 		if not(is(name)) or not(isf(path)) then
-			fpath = ((fpath ~= "" and fpath.."/") or "")..name
+			if fpath ~= "" then fpath fpath.."/" end
+			fpath = fpath..name
 			if i == max then writefile(fpath, "")
 			else makefolder(fpath) end
 		end
