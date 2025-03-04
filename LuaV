@@ -259,7 +259,7 @@ local lt = luav.metadata["table"]
 	-- lt.__eq = function(lt, obj) return lt[1] == cf.unLuaV(obj) end
 
 local lt = luav.metadata["string"]
-	lt.__call = function(s) return s[1] end
+	lt.__call = function(s, name) return string[name](s[1]) end
 	lt.__add = function(str1, str2) str1 = str1[1]; return str1.." "..str2 end
 	lt.__sub = function(str1, str2) str1 = str1[1]; local fstr = str1:gsub(str2, ""); return cf.Luav(fstr) end
 	lt.__mul = function(str, num) str = str[1]; local fstr = ""; for a=1, num do fstr = fstr..str end; return cf.Luav(fstr) end
