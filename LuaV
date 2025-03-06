@@ -143,7 +143,7 @@ end
 function cf.chat(msg) o.saymsg_event:f(cf.unLuaV(msg), "ALL") end
 function cf.echat(msg) o.p[1]:chat(cf.unLuaV(msg)) end
 function cf.lchat(msg, color, size, font) o.sg[1]:SetCore("ChatMakeSystemMessage", {Text = cf.unLuaV(msg), Color = color or Color3.fromRGB(255, 0, 0), TextSize = size or 18, Font = font or Enum.Font.SourceSansBold}) end
-function cf.bchat(msg, num, length) for a=1,(num or 5) do cf.echat("can can can can can can can can can can can ") end; qw(0.3); cf.chat(msg) end
+function cf.bchat(msg, num, length) cf.echat("can can can can can can can can can can can") qw(0.3); cf.chat(msg) end
 
 -- getgenv().____ = cf.LuaV(____)
 	getgenv().read = cf.LuaV(readfile)
