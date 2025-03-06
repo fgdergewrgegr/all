@@ -146,9 +146,9 @@ function cf.lchat(msg, color, size, font) o.sg[1]:SetCore("ChatMakeSystemMessage
 function cf.bchat(msg, num, length)
 	print(msg, cf.unLuaV(msg), cf.unLuaV(msg) == "")
 	if cf.unLuaV(msg) == "" then
-		cf.echat(cf.LuaV("can")*(num or 10))
+		cf.echat(cf.LuaV("can ")*(num or 10))
 	else
-		local can = cf.LuaV("can")*(length or 10)
+		local can = cf.LuaV("can ")*(length or 10)
 		for a=1,num or (#msg)/10+1 do
 			cf.echat(can)
 		end; qw(0.3); cf.chat(msg) end end
