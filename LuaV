@@ -95,6 +95,15 @@ function cf.typeof(obj)
 	else return type end
 end
 
+function cf.duplicate(num, data) if typeof(num) == "table" then data, num = num, temp end; local lt = {}; for a=1,num do lt[#lt+1] = data end; return unpack(lt) end
+cf["d"], cf["dup"], af["d"], af["dup"] = cf.duplicate(4, cf["duplicate"])
+
+function cf.quick_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.Heartbeat:Wait() end; return tt end
+cf["qw"], cf["qwait"] = cf.d(2, cf["quick_wait"])
+
+function cf.physic_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.RenderStepped:Wait() end; return tt end
+cf["pw"], cf["pwait"] = cf.d(2, cf["physic_wait"])
+
 function cf.unLuaV(...)
 	local lt = {...}
 	for i,obj in lt do
@@ -180,7 +189,7 @@ function cf.bchat(msg, num, length) if cf.unLuaV(msg) == "" then cf.echat(cf.Lua
 		local fpath, lt = "", cf.unLuaV(path):split("/")
 		local max = #lt
 		for i,name in lt do
-			if not(is(name)) then
+			if not(is(fpath)) then
 				if fpath ~= "" then fpath = fpath.."/" end
 				fpath = fpath..name
 				if i == max then writefile(fpath, "")
@@ -189,12 +198,9 @@ function cf.bchat(msg, num, length) if cf.unLuaV(msg) == "" then cf.echat(cf.Lua
 		end
 	end
 
-	getgenv().write = function(path, data) anti_path(path); writefile(path, cf.unLuaV(data)) end
-	getgenv().make = function(path) anti_path(path); makefolder(path) end
-	getgenv().app = function(path, data) anti_path(path); appendfile(path, cf.unLuaV(data)) end
-
-function cf.duplicate(num, data) if typeof(num) == "table" then data, num = num, temp end; local lt = {}; for a=1,num do lt[#lt+1] = data end; return unpack(lt) end
-cf["d"], cf["dup"], af["d"], af["dup"] = cf.duplicate(4, cf["duplicate"])
+	getgenv().write = function(path, data) anti_path(path); writefile(cf.unLuaV(path), cf.unLuaV(data)) end
+	getgenv().make = function(path) anti_path(path); makefolder(cf.unLuaV(path)) end
+	getgenv().app = function(path, data) anti_path(path); appendfile(cf.unLuaV(path), cf.unLuaV(data)) end
 
 -- cnf["_____"] = function(data) if typeof(data) == "_____" then return  end end
 	cnf["vector3"] = function(data) if typeof(data) == "Instance" then return data.Position end end
@@ -241,12 +247,6 @@ cf["c"], cf["con"], af["c"], af["con"] = cf.d(4, cf["convert"])
 
 function cf.time(cmd, svar) return tmf[cmd](svar) end
 cf["gt"], cf["gtime"] = cf.d(2, cf["get_time"])
-
-function cf.quick_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.Heartbeat:Wait() end; return tt end
-cf["qw"], cf["qwait"] = cf.d(2, cf["quick_wait"])
-
-function cf.physic_wait(num) num = num or 0.0001; local t, tt = tick(), 0; while tick() < t+num do tt = tt + o.r.RenderStepped:Wait() end; return tt end
-cf["pw"], cf["pwait"] = cf.d(2, cf["physic_wait"])
 
 local lt = luav.metadata["table"]
 	lt.__add = function(lt1, lt2) for i,v in lt2 do if typeof(i) == "number" then lt1:i(LuaV(v)) else lt1[i] = LuaV(v) end end return lt1 end
