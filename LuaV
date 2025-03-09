@@ -179,28 +179,28 @@ function cf.bchat(msg, num, length) if cf.unLuaV(msg) == "" then cf.echat(cf.Lua
 	getgenv().lz4 = cf.LuaV(lz4compress)
 	getgenv().dlz4 = cf.LuaV(lz4decompress)
 
-	getgenv().scboard = cf.LuaV(setclipboard)
+	getgenv().scb = cf.LuaV(setclipboard)
 	getgenv().sfps = cf.LuaV(setfpscap)
 	getgenv().load = cf.LuaV(loadstring)
 
 -- getgenv().____ = function()  end
 	getgenv().is = function(path) return (isf(path) and "file") or (isfl(path) and "folder") end
 	function anti_path(path)
-		local fpath, lt = "", cf.unLuaV(path):split("/")
-		local max = #lt
+		local lt = cf.unLuaV(path):split("/")
+		local max, fpath = #lt, ""
 		for i,name in lt do
+			if fpath == "" then fpath = name else fpath = fpath.."/"..name end
 			if not(is(fpath)) then
-				if fpath ~= "" then fpath = fpath.."/" end
-				fpath = fpath..name
 				if i == max then writefile(fpath, "")
 				else makefolder(fpath) end
 			end
 		end
 	end
 
-	getgenv().write = function(path, data) anti_path(path); writefile(cf.unLuaV(path), cf.unLuaV(data)) end
-	getgenv().make = function(path) anti_path(path); makefolder(cf.unLuaV(path)) end
-	getgenv().app = function(path, data) anti_path(path); appendfile(cf.unLuaV(path), cf.unLuaV(data)) end
+	getgenv().write = cf.LuaV(function(path, data) anti_path(path); writefile(cf.unLuaV(path), cf.unLuaV(data)) end)
+	getgenv().make = cf.LuaV(function(path) anti_path(path); makefolder(cf.unLuaV(path)) end)
+	getgenv().app = cf.LuaV(function(path, data) anti_path(path); appendfile(cf.unLuaV(path), cf.unLuaV(data)) end)
+	-- getgenv().lz5 = 
 
 -- cnf["_____"] = function(data) if typeof(data) == "_____" then return  end end
 	cnf["vector3"] = function(data) if typeof(data) == "Instance" then return data.Position end end
@@ -311,7 +311,10 @@ local lt = luav.metadata["string"]
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = cf.LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = cf.LuaV(p) end; return tree end end
 			function lt:get_char() self = self:c("p"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
-			function lt:get_objs(class) local lt = cf.LuaV({}); for _,obj in self:gc() do if obj[1]:IsA(class) then lt:i(obj) end end; return lt end
+			function lt:get_children_with_class(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gc() do if obj:IsA(arg) then lt:i(obj) end end; return lt end
+			function lt:get_children_with_name(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gc() do if obj[1].Name == arg then lt:i(obj) end end; return lt end
+			function lt:get_descendants_with_class(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gd() do if obj:IsA(arg) then lt:i(obj) end end; return lt end
+			function lt:get_descendants_with_name(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gd() do if obj[1].Name == arg then lt:i(obj) end end; return lt end
 
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 				lt["gc"], lt["gchildren"] = cf.d(2, lt["get_children"])
@@ -319,7 +322,11 @@ local lt = luav.metadata["string"]
 				lt["ga"], lt["gattribute"] = cf.d(2, lt["get_attribute"])
 				lt["gp"], lt["gparents"] = cf.d(2, lt["get_parents"])
 				lt["gcr"], lt["gchar"] = cf.d(2, lt["get_char"])
-				lt["go"], lt["gobjs"] = cf.d(2, lt["get_objs"])
+				lt["gowp"], lt["gobjswithprop"] = cf.d(2, lt["get_objs_with_prop"])
+				lt["gcwc"], lt["gchildrenwithclass"] = cf.d(2, lt["get_children_with_class"])
+				lt["gcwn"], lt["gchildrenwithname"] = cf.d(2, lt["get_children_with_name"])
+				lt["gdwc"], lt["gdescendantswithclass"] = cf.d(2, lt["get_descendants_with_class"])
+				lt["gdwn"], lt["gdescendantswithname"] = cf.d(2, lt["get_descendants_with_name"])
 
 		--♥sets♥
 			function lt:set_attribute(name, value) self[1]:SetAttribute(cf.c(name, "s")[1], cf.unLuaV(value)); return cf.LuaV(value) end
@@ -328,6 +335,7 @@ local lt = luav.metadata["string"]
 				lt["sa"], lt["sattribute"] = cf.d(2, lt["set_attribute"])
 		
 		--♥others♥
+			function lt:IsA(name) return self[1]:IsA(cf.unLuaV(name)) end
 			function lt:property_changed(prop, func) self[1]:GetPropertyChangedSignal(cf.unLuaV(cf.c(prop, "s"))):Connect(func) end
 			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = val end; return cf.LuaV(obj) end
 			function lt:create_ins(class, data, config) local format = a[class] or {}; class, data = format[1] or class, format[2] or data; local obj = self:ffc(data.Name)
@@ -371,9 +379,9 @@ local lt = luav.metadata["string"]
 		function lt:json_read_write(name) if name then write("LuaV/saves/"..name..".txt", o.hs[1]:JSONEncode(self[1])) else return read("LuaV/saves/"..self[1]..".txt") end end
 		function lt:save_run(name) if name then write("LuaV/saves/"..name..".func", self[1]) else return read("LuaV/saves/"..self[1]..".func") end end
 		function lt:fastload(name) local fname = name or self[1]; local path = "LuaV/fastload/"..fname.."/"..fname; if name then self = self[1]
-		if is(path..".lua") then cf.LuaV(write):td(path..".link", self); cf.LuaV(write):td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
+		if is(path..".lua") then write:td(path..".link", self); write:td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
 		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return load(data) end
-		else cf.LuaV(write):td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
+		else write:td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
 		function lt:run(...) return load(self[1])(...) end
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
