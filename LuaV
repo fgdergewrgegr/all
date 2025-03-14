@@ -142,7 +142,7 @@ function cf.rtext(length, symbols, letters, numbers)
 	end; return ftext
 end
 
-function cf.chat(msg) if o.cs.ChatVersion == Enum.ChatVersion.TextChatService then o.cs.TextChannels.RBXGeneral:SendAsync(str(cf.unLuaV())) else o.rc.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str(cf.unLuaV()), "All") end end
+function cf.chat(msg) if o.cs.ChatVersion == Enum.ChatVersion.TextChatService then o.cs.TextChannels.RBXGeneral:SendAsync(str(cf.unLuaV(msg))[1]) else o.rc.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str(cf.unLuaV(msg))[1], "All") end end
 function cf.echat(msg) o.p[1]:chat(cf.unLuaV(msg)) end
 function cf.lchat(msg, color, size, font) o.sg[1]:SetCore("ChatMakeSystemMessage", {Text = cf.unLuaV(msg), Color = color or Color3.fromRGB(255, 0, 0), TextSize = size or 18, Font = font or Enum.Font.SourceSansBold}) end
 function cf.bchat(msg, num, length) if cf.unLuaV(msg) == "" then cf.echat(cf.LuaV("can ")*(num or 10)) else local can = cf.LuaV("can ")*(length or 10); for a=1,num or (#msg)/10+1 do cf.echat(can) end; qw(0.3); cf.chat(msg) end end
@@ -376,6 +376,8 @@ local lt = luav.metadata["string"]
 		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return load(data) end
 		else write:td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
 		function lt:run(...) return load(self[1])(...) end
+		function lt:replace(arg1, arg2) local fstr = ""; for _,s in cf.unLuaV(arg1):split("") do fstr = fstr.."["..s.."]" end; return self[1]:gsub(fstr, arg2) end
+		-- function lt:read_replace_write()
 
 		-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 			lt["tn"], lt["tnum"] = cf.d(2, lt["tonumbr"])
@@ -383,7 +385,8 @@ local lt = luav.metadata["string"]
 			lt["jrw"], lt["j_rd_wr"] = cf.d(2, lt["json_read_write"])
 			lt["sr"], lt["sv_rn"] = cf.d(2, lt["save_run"])
 			lt["fl"], lt["fload"] = cf.d(2, lt["fastload"])
-			lt["r"], lt["rn"] = cf.d(2, lt["run"])
+			lt["r"], lt["rep"] = cf.d(2, lt["replace"])
+			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
 
 	-- local lt = luav.data["number"]
 	-- 	function lt:destabilize(num) local onum = self[1]; return LuaV(onum-num, onum+num) end
