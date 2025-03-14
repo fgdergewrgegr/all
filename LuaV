@@ -81,6 +81,13 @@ local timefunc, timefunc1 = tick(), tick()
 	o["mhv3"] = Vector3.new("inf", "inf", "inf")
 	o["nv3"] = Vector3.new()
 
+
+	local add, adds = "_event", "_event"
+	o["chat"..adds] = o.rs:FindFirstChild("DefaultChatSystemChatEvents")
+	if o["chat"..adds] then
+		o["saymsg"..add] = o["chat"..adds]:WaitForChild("SayMessageRequest")
+	end
+
 cf.old_typeof = typeof
 function cf.typeof(obj)
 	local type = cf.old_typeof(obj)
@@ -142,7 +149,7 @@ function cf.rtext(length, symbols, letters, numbers)
 	end; return ftext
 end
 
-function cf.chat(msg) if o.cs.ChatVersion == Enum.ChatVersion.TextChatService then o.cs.TextChannels.RBXGeneral:SendAsync(str(cf.unLuaV(msg))[1]) else o.rc.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str(cf.unLuaV(msg))[1], "All") end end
+function cf.chat(msg) if o.cs.ChatVersion == Enum.ChatVersion.TextChatService then o.cs.TextChannels.RBXGeneral:SendAsync(str(cf.unLuaV(msg))[1]) else o["saymsg"..add]:FireServer(str(cf.unLuaV(msg))[1], "All") end end
 function cf.echat(msg) o.p[1]:chat(cf.unLuaV(msg)) end
 function cf.lchat(msg, color, size, font) o.sg[1]:SetCore("ChatMakeSystemMessage", {Text = cf.unLuaV(msg), Color = color or Color3.fromRGB(255, 0, 0), TextSize = size or 18, Font = font or Enum.Font.SourceSansBold}) end
 function cf.bchat(msg, num, length) if cf.unLuaV(msg) == "" then cf.echat(cf.LuaV("can ")*(num or 10)) else local can = cf.LuaV("can ")*(length or 10); for a=1,num or (#msg)/10+1 do cf.echat(can) end; qw(0.3); cf.chat(msg) end end
