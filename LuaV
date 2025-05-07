@@ -3,9 +3,9 @@
 --[[
 
 
-local path = "LuaV/LuaV.lua"; if not(getgenv().luav) then if isfile(path) then dofile(path)() else
+local path = "LuaV/LuaV.lua"; if not(getgenv().luav) then if isfile(path) then loadstring(readfile(path))() else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
-task.defer(writefile, path, data); load(data)() end end; path = nil
+task.defer(writefile, path, data); loadstring(data)() end end; path = nil
 
 ]]
 
@@ -31,7 +31,7 @@ getgenv().luav = {
 		objs = {}
 	}, iadds = {},
 	addfuncs = {},
-	confuncs = {},
+	confuncs = {},	
 	timefuncs = {}
 }
 
@@ -53,14 +53,16 @@ local timefunc, timefunc1 = tick(), tick()
 	o["r"] = cloneref(game:GetService("RunService"))
 	o["db"] = cloneref(game:GetService("Debris"))
 	o["rs"] = cloneref(game:GetService("ReplicatedStorage"))
-	o["rf"] = cloneref(game:GetService("ReplicatedFirst"))
+	o["rf"] = cloneref(game:GetServiceice("ReplicatedFirst"))
 	o["sg"] = cloneref(game:GetService("StarterGui"))
 	o["ms"] = cloneref(game:GetService("MaterialService"))
 	o["cg"] = gethui() or game:GetService("CoreGui")
 	o["cs"] = cloneref(game:GetService("TextChatService"))
 	o["ps"] = cloneref(game:GetService("PhysicsService"))
 	o["hs"] = cloneref(game:GetService("HttpService"))
+	o["ts"] = cloneref(game:GetService("TeleportService"))
 	o["uis"] = cloneref(game:GetService("UserInputService"))
+	o["vim"] = cloneref(game:GetService("VirtualInputManager"))
 
 -- o["_____"] = o._____.
 	o["me"] = o.p.LocalPlayer
@@ -153,6 +155,11 @@ function cf.chat(msg) if o.cs.ChatVersion == Enum.ChatVersion.TextChatService th
 function cf.echat(msg) o.p[1]:chat(cf.unLuaV(msg)) end
 function cf.lchat(msg, color, size, font) o.sg[1]:SetCore("ChatMakeSystemMessage", {Text = cf.unLuaV(msg), Color = color or Color3.fromRGB(255, 0, 0), TextSize = size or 18, Font = font or Enum.Font.SourceSansBold}) end
 function cf.bchat(msg, num, length) if cf.unLuaV(msg) == "" then cf.echat(cf.LuaV("can ")*(num or 10)) else local can = cf.LuaV("can ")*(length or 10); for a=1,num or (#msg)/10+1 do cf.echat(can) end; qw(0.3); cf.chat(msg) end end
+
+function cf.click()
+	o.vim:SendMouseButtonEvent(o.m.X, o.m.Y, 0, true, game, 0); cf.qw(0.01)
+	o.vim:SendMouseButtonEvent(o.m.X, o.m.Y, 0, false, game, 0)
+end
 
 -- getgenv().____ = cf.LuaV(____)
 	getgenv().read = cf.LuaV(readfile)
