@@ -192,7 +192,7 @@ end
 
 -- getgenv().____ = function()  end
 	if dofile then getgenv().dof = cf.LuaV(dofile)
-	else getgenv().dof = cf.LuaV(function(path) return load(read(path)) end)
+	else getgenv().dof = cf.LuaV(function(path) return load(read(path)) end) end
 
 	getgenv().is = function(path) return (isf(path) and "file") or (isfl(path) and "folder") end
 	function anti_path(path)
