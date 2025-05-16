@@ -163,7 +163,7 @@ end
 
 -- getgenv().____ = cf.LuaV(____)
 	getgenv().read = cf.LuaV(readfile)
-	getgenv().dof = cf.LuaV(dofile)
+	-- getgenv().dof = cf.LuaV(dofile)
 	getgenv().del = cf.LuaV(delfile)
 
 	getgenv().isf = cf.LuaV(isfile)
@@ -191,6 +191,9 @@ end
 	getgenv().load = cf.LuaV(loadstring)
 
 -- getgenv().____ = function()  end
+	if dofile then getgenv().dof = cf.LuaV(dofile)
+	else getgenv().dof = cf.LuaV(function(path) return load(read(path)) end)
+
 	getgenv().is = function(path) return (isf(path) and "file") or (isfl(path) and "folder") end
 	function anti_path(path)
 		local lt = cf.unLuaV(path):split("/")
@@ -385,10 +388,26 @@ local lt = luav.metadata["string"]
 		function lt:read_write(name) if name then write("LuaV/saves/"..name..".txt", self[1]) else return read("LuaV/saves/"..self[1]..".txt") end end
 		function lt:json_read_write(name) if name then write("LuaV/saves/"..name..".txt", o.hs[1]:JSONEncode(self[1])) else return read("LuaV/saves/"..self[1]..".txt") end end
 		function lt:save_run(name) if name then write("LuaV/saves/"..name..".func", self[1]) else return read("LuaV/saves/"..self[1]..".func") end end
-		function lt:fastload(name) local fname = name or self[1]; local path = "LuaV/fastload/"..fname.."/"..fname; if name then self = self[1]
-		if is(path..".lua") then write:td(path..".link", self); write:td(path..".lua", game:HttpGet(self)); return dof(path..".lua")
-		else write(path..".link", self); local data = game:HttpGet(self); write(path..".lua", data); return load(data) end
-		else write:td(path..".lua", game:HttpGet(read(path..".link"))); return dof(path..".lua") end end
+		function lt:fastload(name)
+			local fname = name or self[1]
+			local path = "LuaV/fastload/"..fname.."/"..fname
+			if name then
+				self = self[1]
+				if is(path..".lua") and is(path..".https") then
+					write:td(path..".https", self)
+					write:td(path..".lua", game:HttpGet(self))
+					return dof(path..".lua")
+				else
+					write(path..".https", self)
+					local data = game:HttpGet(self)
+					write(path..".lua", data)
+					return load(data)
+				end
+			else
+				write:td(path..".lua", game:HttpGet(read(path..".https")))
+				return dof(path..".lua")
+			end
+		end
 		function lt:run(...) return load(self[1])(...) end
 		function lt:replace(arg1, arg2) local fstr = ""; for _,s in cf.unLuaV(arg1):split("") do fstr = fstr.."["..s.."]" end; return self[1]:gsub(fstr, arg2) end
 		-- function lt:read_replace_write()
