@@ -236,7 +236,7 @@ end
 	cnf["v3"], cnf["ve3"] = cf.d(2, cnf["vector3"])
 	cnf["cf"], cnf["cfr"] = cf.d(2, cnf["cframe"])
 	cnf["c"], cnf["char"] = cf.d(2, cnf["character"])
-	cnf["p"], cnf["plr"] = cf.d(2, cnf["player"])
+	cnf["pl"], cnf["plr"] = cf.d(2, cnf["player"])
 	cnf["i"], cnf["uid"] = cf.d(2, cnf["userid"])
 	cnf["s"], cnf["str"] = cf.d(2, cnf["string"])
 	cnf["rs"], cnf["rstr"] = cf.d(2, cnf["readable_string"])
@@ -244,7 +244,7 @@ end
 	cnf["n"], cnf["nm"] = cf.d(2, cnf["name"])
 
 
-function cf.convert(data, to, arg) data = cf.LuaV(data); return cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg)) or data end
+function cf.convert(data, to, arg) data = cf.LuaV(data); return (cnf[cf.unLuaV(to):lower()] and cf.LuaV(cnf[cf.unLuaV(to):lower()](data, arg))) or data end
 cf["c"], cf["con"], af["c"], af["con"] = cf.d(4, cf["convert"])
 
 -- tmf["____"] = function() end
@@ -308,7 +308,7 @@ local lt = luav.metadata["string"]
 
 		-- ♥checks♥
 			function lt:check_hum() self = self[1]; if self and self.Health ~= 0 and self:GetState() ~= Enum.HumanoidStateType.Dead then return self end end
-			function lt:check_friend(id, arg) if not(id) then id = o.muid end; self = self:c("p"); id = cf.c(id, "i")
+			function lt:check_friend(id, arg) if not(id) then id = o.muid end; self = self:c("pl"); id = cf.c(id, "i")
 			if self:ga("Friend") == nil then local t = cf.LuaV(function() return self[1]:IsFriendsWith(id[1]) end):pa(arg); self:sa("Friend", t); return t else return self:ga("Friend") end end
 			
 			-- lt["_____"], lt["_____"] = cf.d(2, lt["_____"])
@@ -320,7 +320,7 @@ local lt = luav.metadata["string"]
 			function lt:get_descendants() return cf.LuaV({cf.LuaV(unpack(self[1]:GetDescendants()))}) end
 			function lt:get_attribute(...) local lt = {...}; for _,name in lt do lt[_] = cf.LuaV(self[1]:GetAttribute(name)) end; return unpack(lt) end
 			function lt:get_parents() self = self[1]; if self.Parent then local p = self; local tree = {self} while p.Parent do p = p.Parent; tree[#tree+1] = cf.LuaV(p) end; return tree end end
-			function lt:get_char() self = self:c("p"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
+			function lt:get_char() self = self:c("pl"); return self.Character or (self.CharacterAdded:Wait() and self.Character) end
 			function lt:get_children_with_class(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gc() do if obj:IsA(arg) then lt:i(obj) end end; return lt end
 			function lt:get_children_with_name(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gc() do if obj[1].Name == arg then lt:i(obj) end end; return lt end
 			function lt:get_descendants_with_class(arg) local lt = cf.LuaV({}); arg = cf.unLuaV(arg); for _,obj in self:gd() do if obj:IsA(arg) then lt:i(obj) end end; return lt end
@@ -347,9 +347,9 @@ local lt = luav.metadata["string"]
 		--♥others♥
 			function lt:IsA(name) return self[1]:IsA(cf.unLuaV(name)) end
 			function lt:property_changed(prop, func) self[1]:GetPropertyChangedSignal(cf.unLuaV(cf.c(prop, "s"))):Connect(func) end
-			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = val end; return cf.LuaV(obj) end
+			local function hci(parent, class, data) local obj = Instance.new(class, parent[1]); for pror, val in data do obj[pror] = cf.unLuaV(val) end; return cf.LuaV(obj) end
 			function lt:create_ins(class, data, config) local format = a[class] or {}; class, data = format[1] or class, format[2] or data; local obj = self:ffc(data.Name)
-			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.c(val, prop) end return obj else return hci(self, class, data) end end
+			if obj and (not(config) or (config and not(config.only_new))) then for prop, val in data do obj[1][prop] = cf.unLuaV(cf.c(val, prop)) end return obj else return hci(self, class, data) end end
 			function lt:destroy_child(...) local lt = {...}; for i,name in lt do while self:ffc(name) do lt[i] = self:ffc(name)[1]:Destroy() end end; return lt end
 			function lt:child_added(func, ...) local lt = {...}; self.ChildAdded:Connect(function(child) if #lt > 0 then for _,name in lt do if child.Name == cf.c(name, "n")[1] then func(cf.LuaV(child)) end end else func(cf.LuaV(child)) end end) end
 			function lt:try(name, ...) local args = cf.LuaV({...}):unLuaV(); local args = {pcall(load("return function(obj, ...) return obj:"..name.."(...) end")(), self[1], unpack(args))}; return cf.LuaV(unpack(args, 2)) end
