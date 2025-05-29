@@ -1,3 +1,6 @@
+
+-- 
+
 local path = "LuaV/LuaV.lua"; if not(getgenv().luav) then if isfile(path) then loadstring(readfile(path))() else
 local data = game:HttpGet("https://raw.githubusercontent.com/fgdergewrgegr/all/refs/heads/main/LuaV")
 task.defer(writefile, path, data); loadstring(data)() end end; path = nil
