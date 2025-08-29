@@ -306,8 +306,8 @@ local lt = luav.metadata["string"]
 
 			function lt:ffcp(prop, ...) local lt = {...}; for _,obj in pairs(self:gc()) do local data = cf.LuaV(function() if #lt ~= 0 then for _,v in lt do if obj[cf.unLuaV(prop)] == v then return obj end end else return obj end end):p(); if data then return cf.LuaV(data) end end end
 			function lt:ffdp(prop, ...) local lt = {...}; for _,obj in pairs(self:gd()) do local data = cf.LuaV(function() if #lt ~= 0 then for _,v in lt do if obj[cf.unLuaV(prop)] == v then return obj end end else return obj end end):p(); if data then return cf.LuaV(data) end end end
-			function lt:ffcsp(prop, ...) local lt, lt1 = {...}, {}; for _,obj in pairs(self:gc()) do local data = cf.LuaV(function() if table.maxn(lt) ~= 0 then for _,v in lt do if obj[cf.unLuaV(prop)] == v then return obj end end else return obj end end):p(); lt1[#lt1+1] = data end; return cf.LuaV(unpack(lt1)) end
-			function lt:ffdsp(prop, ...) local lt, lt1 = {...}, {}; for _,obj in pairs(self:gd()) do local data = cf.LuaV(function() if #lt ~= 0 then for _,v in lt do if obj[cf.unLuaV(prop)] == v then return obj end end else return obj end end):p(); lt1[#lt1+1] = data end; return cf.LuaV(unpack(lt1)) end
+			function lt:ffcsp(prop, ...) local lt, lt1 = {...}, {}; for _,obj in pairs(self:gc()) do local data = cf.LuaV(function() if table.maxn(lt) ~= 0 then for _,v in lt do if obj[cf.unLuaV(prop)] == v then return obj end end else return obj end end):pa(); lt1[#lt1+1] = data end; return cf.LuaV(unpack(lt1)) end
+			function lt:ffdsp(prop, ...) local lt, lt1 = {...}, {}; for _,obj in pairs(self:gd()) do local data = cf.LuaV(function() if #lt ~= 0 then for _,v in lt do if obj[cf.unLuaV(prop)] == v then return obj end end else return obj end end):pa(); lt1[#lt1+1] = data end; return cf.LuaV(unpack(lt1)) end
 
 		-- ♥checks♥
 			function lt:check_hum() self = self[1]; if self and self.Health ~= 0 and self:GetState() ~= Enum.HumanoidStateType.Dead then return self end end
